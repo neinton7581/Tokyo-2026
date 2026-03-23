@@ -492,6 +492,7 @@
 
   /* ---- 預約憑證 ACCORDION ---- */
   .voucher-section { margin-top: 0.5rem; }
+  .voucher-day-wrap { display: block; }
   /* Day-level accordion */
   .voucher-day-input { display: none; }
   .voucher-day-label {
@@ -2828,7 +2829,7 @@ body {
                 </div></div>
                 <input type="checkbox" id="si-6" class="si-input"><label class="spot-info-toggle" for="si-6" style="margin-top:0.4rem;">🚣 划船注意事項<span class="si-arrow">▾</span></label>
                 <div class="spot-info-body"><div class="spot-info-content"><div class="si-section-title">🎫 預約資訊</div>
-                  <div class="si-body"><strong style="color:#788871; white-space:nowrap;">預約時間</strong>｜<strong>09:00</strong>（智慧票券線上購票完成 ✅）<br><strong style="color:#788871; white-space:nowrap;">入場方式</strong>｜出示購票 QR Code 掃碼入場，<strong>請提前確認票券 App 可正常開啟</strong><br><strong style="color:#788871; white-space:nowrap;">建議備份</strong>｜截圖票券 QR Code 存至相機膠捲，萬一手機沒網路也能出示<br><strong style="color:#788871; white-space:nowrap;">抵達時間</strong>｜建議 <strong>08:50 前</strong>到達售票口，預留驗票及找停靠點的時間
+                  <div class="si-body"><strong style="color:#788871; white-space:nowrap;">預約時間</strong>｜<strong>09:00</strong>（Webket線上購票完成 ✅）<br><strong style="color:#788871; white-space:nowrap;">入場方式</strong>｜出示購票 QR Code 掃碼入場，<strong>請提前確認票券 App 可正常開啟</strong><br><strong style="color:#788871; white-space:nowrap;">驗票地點</strong>｜千鳥之淵乘船碼頭入口處的「事前購入者専用 乗船受付（Digital Ticket Reception）」<br><strong style="color:#788871; white-space:nowrap;">抵達時間</strong>｜所有乘客需於 <strong>08:50 前</strong>到達售票口，預留驗票及找停靠點的時間
                   </div>
                   <div class="si-section-title">⚠️ 乘船安全規則</div>
                   <div class="si-body">❌ 乘船中禁止換座位或起身站立（有落水危險）<br>❌ 雨天、強風、水位異常時暫停營業<br>⚠️ 北側石垣（石牆）目前有崩落危險，南側部分區域封閉，請勿駛入禁區<br>📱 當日最新營業狀態請確認官方 X（Twitter）：<strong>@chidori_boat</strong>
@@ -5944,199 +5945,380 @@ body {
     <div class="voucher-section">
 
       <!-- 3/27 -->
-      <input type="checkbox" id="vd-0327" class="voucher-day-input">
-      <label class="voucher-day-label" for="vd-0327">
-        <span>03 / 27 &nbsp;·&nbsp; Day 1</span><span class="vd-arrow">▾</span>
-      </label>
-      <div class="voucher-day-body">
-        <div class="voucher-item-wrap">
-          <input type="checkbox" id="vi-0327-2" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0327-2">機場接駁</label>
-          <div class="voucher-item-body">訂單編號：F15018041<br>
-            <a href="https://68666.tw/xkwL" target="_blank">票卡網站</a>（驗證碼 2554）<br>
-           預約時間：3/27 09:00</div>
-        </div>
-        <div class="voucher-item-wrap">
-          <input type="checkbox" id="vi-0327-1" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0327-1">預約航班</label>
-          <div class="voucher-item-body">訂位代號：5NVUTS<br>
-           班機號碼：BR196  TPE → NRT<br>
-           班機時間：1520 → 1920<br>
-           飛行時間：3小時
-         </div>
-        </div>
-        <div class="voucher-item-wrap">
-          <input type="checkbox" id="vi-0327-3" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0327-3">上野御徒町民宿</label>
-          <div class="voucher-item-body">Airbnb 確認碼：HMBM9DKY5B<br>
-            自助入住方式：智慧門鎖<br>
-            <img src="img/day_1_airbnb_pdf.png" alt="上野民宿住宿憑證" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+      <div class="voucher-day-wrap">
+        <input type="checkbox" id="vd-0327" class="voucher-day-input">
+        <label class="voucher-day-label" for="vd-0327">
+          <span>03 / 27 &nbsp;·&nbsp; Day 1</span><span class="vd-arrow">▾</span>
+        </label>
+        <div class="voucher-day-body">
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0327-2" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0327-2">機場接駁</label>
+            <div class="voucher-item-body">訂單編號：F15018041<br>
+              <a href="https://68666.tw/xkwL" target="_blank">票卡網站</a>（驗證碼 2554）<br>
+             預約時間：3/27 09:00</div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0327-1" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0327-1">預約航班</label>
+            <div class="voucher-item-body">訂位代號：5NVUTS<br>
+             班機號碼：BR196  TPE → NRT<br>
+             班機時間：15:20 → 19:20<br>
+             飛行時間：3小時</div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0327-3" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0327-3">上野御徒町民宿</label>
+            <div class="voucher-item-body">Airbnb 確認碼：HMBM9DKY5B<br>
+              自助入住方式：智慧門鎖<br>
+              <img src="img/day_1_airbnb_pdf.png" alt="上野民宿住宿憑證" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
         </div>
       </div>
 
       <!-- 3/28 -->
-      <input type="checkbox" id="vd-0328" class="voucher-day-input">
-      <label class="voucher-day-label" for="vd-0328">
-        <span>03 / 28 &nbsp;·&nbsp; Day 2</span><span class="vd-arrow">▾</span>
-      </label>
-      <div class="voucher-day-body">
-        <div class="voucher-item-wrap">
-          <input type="checkbox" id="vi-0328-1" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0328-1">📝 待新增</label>
-          <div class="voucher-item-body">（待填入）</div>
+      <div class="voucher-day-wrap">
+        <input type="checkbox" id="vd-0328" class="voucher-day-input">
+        <label class="voucher-day-label" for="vd-0328">
+          <span>03 / 28 &nbsp;·&nbsp; Day 2</span><span class="vd-arrow">▾</span>
+        </label>
+        <div class="voucher-day-body">
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0328-1" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0328-1">千鳥之淵電子船票</label>
+            <div class="voucher-item-body">預約平台：Webket<br>
+            預約時間：09:00<br>
+            乘船時間1小時<br>
+            <img src="img/3_28_0900.png" alt="千鳥之淵電子船票QR Code" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0328-2" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0328-2">機場接駁</label>
+            <div class="voucher-item-body">訂單編號：F15018041<br>
+              <a href="https://68666.tw/xkwL" target="_blank">票卡網站</a>（驗證碼 2554）<br>
+             預約時間：3/27 09:00
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- 3/29 -->
-      <input type="checkbox" id="vd-0329" class="voucher-day-input">
-      <label class="voucher-day-label" for="vd-0329">
-        <span>03 / 29 &nbsp;·&nbsp; Day 3</span><span class="vd-arrow">▾</span>
-      </label>
-      <div class="voucher-day-body">
-        <div class="voucher-item-wrap">
-          <input type="checkbox" id="vi-0329-1" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0329-1">📝 待新增</label>
-          <div class="voucher-item-body">（待填入）</div>
+      <div class="voucher-day-wrap">
+        <input type="checkbox" id="vd-0329" class="voucher-day-input">
+        <label class="voucher-day-label" for="vd-0329">
+          <span>03 / 29 &nbsp;·&nbsp; Day 3</span><span class="vd-arrow">▾</span>
+        </label>
+        <div class="voucher-day-body">
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0329-1" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0329-1">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0329-2" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0329-2">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0329-3" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0329-3">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0329-4" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0329-4">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
         </div>
       </div>
 
       <!-- 3/30 -->
-      <input type="checkbox" id="vd-0330" class="voucher-day-input">
-      <label class="voucher-day-label" for="vd-0330">
-        <span>03 / 30 &nbsp;·&nbsp; Day 4</span><span class="vd-arrow">▾</span>
-      </label>
-      <div class="voucher-day-body">
-        <div class="voucher-item-wrap">
-          <input type="checkbox" id="vi-0330-1" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0330-1">📝 待新增</label>
-          <div class="voucher-item-body">（待填入）</div>
+      <div class="voucher-day-wrap">
+        <input type="checkbox" id="vd-0330" class="voucher-day-input">
+        <label class="voucher-day-label" for="vd-0330">
+          <span>03 / 30 &nbsp;·&nbsp; Day 4</span><span class="vd-arrow">▾</span>
+        </label>
+        <div class="voucher-day-body">
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0330-1" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0330-1">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0330-2" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0330-2">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0330-3" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0330-3">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
         </div>
       </div>
 
       <!-- 3/31 -->
-      <input type="checkbox" id="vd-0331" class="voucher-day-input">
-      <label class="voucher-day-label" for="vd-0331">
-        <span>03 / 31 &nbsp;·&nbsp; Day 5</span><span class="vd-arrow">▾</span>
-      </label>
-      <div class="voucher-day-body">
-        <div class="voucher-item-wrap">
-          <input type="checkbox" id="vi-0331-1" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0331-1">🚗 租車取車</label>
-          <div class="voucher-item-body">（待填入 Toyota 租車憑證詳情）</div>
-        </div>
-        <div class="voucher-item-wrap">
-          <input type="checkbox" id="vi-0331-2" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0331-2">🏨 溫泉旅館</label>
-          <div class="voucher-item-body">（待填入 秀峰閣湖月 入住憑證詳情）</div>
+      <div class="voucher-day-wrap">
+        <input type="checkbox" id="vd-0331" class="voucher-day-input">
+        <label class="voucher-day-label" for="vd-0331">
+          <span>03 / 31 &nbsp;·&nbsp; Day 5</span><span class="vd-arrow">▾</span>
+        </label>
+        <div class="voucher-day-body">
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0331-1" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0331-1">🚗 租車取車</label>
+            <div class="voucher-item-body">（待填入 Toyota 租車憑證詳情）</div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0331-2" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0331-2">🏨 溫泉旅館</label>
+            <div class="voucher-item-body">（待填入 秀峰閣湖月 入住憑證詳情）</div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0331-3" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0331-3">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0331-4" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0331-4">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
         </div>
       </div>
 
       <!-- 4/1 -->
-      <input type="checkbox" id="vd-0401" class="voucher-day-input">
-      <label class="voucher-day-label" for="vd-0401">
-        <span>04 / 01 &nbsp;·&nbsp; Day 6</span><span class="vd-arrow">▾</span>
-      </label>
-      <div class="voucher-day-body">
-        <div class="voucher-item-wrap">
-          <input type="checkbox" id="vi-0401-1" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0401-1">🚗 還車</label>
-          <div class="voucher-item-body">（待填入 Toyota 還車資訊）</div>
-        </div>
-        <div class="voucher-item-wrap">
-          <input type="checkbox" id="vi-0401-2" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0401-2">🏨 Toy Story Hotel</label>
-          <div class="voucher-item-body">（待填入 Toy Story Hotel 入住憑證詳情）</div>
+      <div class="voucher-day-wrap">
+        <input type="checkbox" id="vd-0401" class="voucher-day-input">
+        <label class="voucher-day-label" for="vd-0401">
+          <span>04 / 01 &nbsp;·&nbsp; Day 6</span><span class="vd-arrow">▾</span>
+        </label>
+        <div class="voucher-day-body">
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0401-1" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0401-1">🚗 還車</label>
+            <div class="voucher-item-body">（待填入 Toyota 還車資訊）</div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0401-2" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0401-2">🏨 Toy Story Hotel</label>
+            <div class="voucher-item-body">（待填入 Toy Story Hotel 入住憑證詳情）</div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0401-3" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0401-3">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0401-4" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0401-4">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
         </div>
       </div>
 
       <!-- 4/2 -->
-      <input type="checkbox" id="vd-0402" class="voucher-day-input">
-      <label class="voucher-day-label" for="vd-0402">
-        <span>04 / 02 &nbsp;·&nbsp; Day 7</span><span class="vd-arrow">▾</span>
-      </label>
-      <div class="voucher-day-body">
-        <div class="voucher-item-wrap">
-          <input type="checkbox" id="vi-0402-1" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0402-1">📝 待新增</label>
-          <div class="voucher-item-body">（待填入）</div>
+      <div class="voucher-day-wrap">
+        <input type="checkbox" id="vd-0402" class="voucher-day-input">
+        <label class="voucher-day-label" for="vd-0402">
+          <span>04 / 02 &nbsp;·&nbsp; Day 7</span><span class="vd-arrow">▾</span>
+        </label>
+        <div class="voucher-day-body">
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0402-1" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0402-1">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0402-2" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0402-2">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0402-3" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0402-3">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
         </div>
       </div>
 
       <!-- 4/3 -->
-      <input type="checkbox" id="vd-0403" class="voucher-day-input">
-      <label class="voucher-day-label" for="vd-0403">
-        <span>04 / 03 &nbsp;·&nbsp; Day 8</span><span class="vd-arrow">▾</span>
-      </label>
-      <div class="voucher-day-body">
-        <div class="voucher-item-wrap">
-          <input type="checkbox" id="vi-0403-1" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0403-1">🏠 GOEN STAY</label>
-          <div class="voucher-item-body">（待填入 GOEN STAY 入住憑證詳情）</div>
+      <div class="voucher-day-wrap">
+        <input type="checkbox" id="vd-0403" class="voucher-day-input">
+        <label class="voucher-day-label" for="vd-0403">
+          <span>04 / 03 &nbsp;·&nbsp; Day 8</span><span class="vd-arrow">▾</span>
+        </label>
+        <div class="voucher-day-body">
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0403-1" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0403-1">🏠 GOEN STAY</label>
+            <div class="voucher-item-body">（待填入 GOEN STAY 入住憑證詳情）</div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0403-2" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0403-2">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0403-3" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0403-3">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
         </div>
       </div>
 
       <!-- 4/4 -->
-      <input type="checkbox" id="vd-0404" class="voucher-day-input">
-      <label class="voucher-day-label" for="vd-0404">
-        <span>04 / 04 &nbsp;·&nbsp; Day 9</span><span class="vd-arrow">▾</span>
-      </label>
-      <div class="voucher-day-body">
-        <div class="voucher-item-wrap">
-          <input type="checkbox" id="vi-0404-1" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0404-1">📝 待新增</label>
-          <div class="voucher-item-body">（待填入）</div>
+      <div class="voucher-day-wrap">
+        <input type="checkbox" id="vd-0404" class="voucher-day-input">
+        <label class="voucher-day-label" for="vd-0404">
+          <span>04 / 04 &nbsp;·&nbsp; Day 9</span><span class="vd-arrow">▾</span>
+        </label>
+        <div class="voucher-day-body">
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0404-1" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0404-1">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0404-2" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0404-2">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0404-3" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0404-3">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
         </div>
       </div>
 
       <!-- 4/5 -->
-      <input type="checkbox" id="vd-0405" class="voucher-day-input">
-      <label class="voucher-day-label" for="vd-0405">
-        <span>04 / 05 &nbsp;·&nbsp; Day 10</span><span class="vd-arrow">▾</span>
-      </label>
-      <div class="voucher-day-body">
-        <div class="voucher-item-wrap">
-          <input type="checkbox" id="vi-0405-1" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0405-1">📝 待新增</label>
-          <div class="voucher-item-body">（待填入）</div>
+      <div class="voucher-day-wrap">
+        <input type="checkbox" id="vd-0405" class="voucher-day-input">
+        <label class="voucher-day-label" for="vd-0405">
+          <span>04 / 05 &nbsp;·&nbsp; Day 10</span><span class="vd-arrow">▾</span>
+        </label>
+        <div class="voucher-day-body">
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0405-1" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0405-1">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0405-2" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0405-2">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0405-3" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0405-3">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
         </div>
       </div>
 
       <!-- 4/6 -->
-      <input type="checkbox" id="vd-0406" class="voucher-day-input">
-      <label class="voucher-day-label" for="vd-0406">
-        <span>04 / 06 &nbsp;·&nbsp; Day 11</span><span class="vd-arrow">▾</span>
-      </label>
-      <div class="voucher-day-body">
-        <div class="voucher-item-wrap">
-          <input type="checkbox" id="vi-0406-1" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0406-1">📝 待新增</label>
-          <div class="voucher-item-body">（待填入）</div>
+      <div class="voucher-day-wrap">
+        <input type="checkbox" id="vd-0406" class="voucher-day-input">
+        <label class="voucher-day-label" for="vd-0406">
+          <span>04 / 06 &nbsp;·&nbsp; Day 11</span><span class="vd-arrow">▾</span>
+        </label>
+        <div class="voucher-day-body">
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0406-1" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0406-1">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0406-2" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0406-2">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0406-3" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0406-3">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
         </div>
       </div>
 
       <!-- 4/7 -->
-      <input type="checkbox" id="vd-0407" class="voucher-day-input">
-      <label class="voucher-day-label" for="vd-0407">
-        <span>04 / 07 &nbsp;·&nbsp; Day 12</span><span class="vd-arrow">▾</span>
-      </label>
-      <div class="voucher-day-body">
-        <div class="voucher-item-wrap">
-          <input type="checkbox" id="vi-0407-1" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0407-1">📝 待新增</label>
-          <div class="voucher-item-body">（待填入）</div>
+      <div class="voucher-day-wrap">
+        <input type="checkbox" id="vd-0407" class="voucher-day-input">
+        <label class="voucher-day-label" for="vd-0407">
+          <span>04 / 07 &nbsp;·&nbsp; Day 12</span><span class="vd-arrow">▾</span>
+        </label>
+        <div class="voucher-day-body">
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0407-1" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0407-1">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0407-2" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0407-2">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0407-3" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0407-3">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
         </div>
       </div>
 
       <!-- 4/8 -->
-      <input type="checkbox" id="vd-0408" class="voucher-day-input">
-      <label class="voucher-day-label" for="vd-0408">
-        <span>04 / 08 &nbsp;·&nbsp; Day 13</span><span class="vd-arrow">▾</span>
-      </label>
-      <div class="voucher-day-body">
-        <div class="voucher-item-wrap">
-          <input type="checkbox" id="vi-0408-1" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0408-1">🚂 N'EX 返程</label>
-          <div class="voucher-item-body">（待填入 N'EX 購票憑證詳情）</div>
+      <div class="voucher-day-wrap">
+        <input type="checkbox" id="vd-0408" class="voucher-day-input">
+        <label class="voucher-day-label" for="vd-0408">
+          <span>04 / 08 &nbsp;·&nbsp; Day 13</span><span class="vd-arrow">▾</span>
+        </label>
+        <div class="voucher-day-body">
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0408-1" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0408-1">🚂 N'EX 返程</label>
+            <div class="voucher-item-body">（待填入 N'EX 購票憑證詳情）</div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0408-2" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0408-2">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
+          <div class="voucher-item-wrap">
+            <input type="checkbox" id="vi-0408-3" class="voucher-item-input">
+            <label class="voucher-item-label" for="vi-0408-3">📝 待新增</label>
+            <div class="voucher-item-body">（待填入）<br>
+              <img src="待放圖片.png" alt="預計要放的圖片" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
+          </div>
         </div>
       </div>
 
