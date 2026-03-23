@@ -563,6 +563,8 @@
     flex: 0 0 100%;
   }
   .voucher-item-input:checked ~ .voucher-item-body { display: block; }
+  .voucher-item-body a { color: #4a6a82; text-decoration: underline; }
+  .voucher-item-body a:hover { color: #2d5070; }
   .voucher-item-wrap { display: contents; }
 
   /* ---- ACCOMMODATION GRID ---- */
@@ -1279,6 +1281,7 @@
     line-height: 1.85;
     word-break: break-word;
     overflow-wrap: break-word;
+    padding: 0.7rem 1rem;
   }
 
   /* 備註小字 */
@@ -5904,34 +5907,34 @@ body {
       <h2 class="section-title">住宿 & 預約憑證</h2>
     </div>
 
-    <div class="si-section-title">住宿安排</div>
+    <div class="si-section-title">🛌 住宿安排</div>
     <div class="accom-grid-2x2">
       <a class="accom-map-link" href="https://maps.app.goo.gl/7hQRBuD2Cpi6TPvD8" target="_blank" rel="noopener">
         <div class="accom-card">
           <div class="accom-dates">03.27 – 03.31 · 4 晚</div>
-          <div class="accom-name">Airbnb 上野<span class="accom-map-pin">📍</span></div>
-          <div class="accom-addr">台東區東上野 54-4，步行 5 分上野站</div>
+          <div class="accom-name">Airbnb 上野御徒町<span class="accom-map-pin"></span></div>
+          <div class="accom-addr">Check-in 16:00，Check-out 11:00</div>
         </div>
       </a>
       <a class="accom-map-link" href="https://maps.app.goo.gl/R1mW4KPmV3w73XKF8" target="_blank" rel="noopener">
         <div class="accom-card">
           <div class="accom-dates">03.31 – 04.01 · 1 晚</div>
-          <div class="accom-name">秀峰閣湖月<span class="accom-map-pin">📍</span></div>
-          <div class="accom-addr">河口湖畔溫泉旅館，Check-in 15:00</div>
+          <div class="accom-name">秀峰閣湖月<span class="accom-map-pin"></span></div>
+          <div class="accom-addr">Check-in 15:00，Check-out 10:00</div>
         </div>
       </a>
       <a class="accom-map-link" href="https://maps.app.goo.gl/xbEhArCBtHjmpBWN7" target="_blank" rel="noopener">
         <div class="accom-card">
           <div class="accom-dates">04.01 – 04.03 · 2 晚</div>
-          <div class="accom-name">Toy Story Hotel<span class="accom-map-pin">📍</span></div>
-          <div class="accom-addr">東京迪士尼度假區，1-47</div>
+          <div class="accom-name">Toy Story Hotel<span class="accom-map-pin"></span></div>
+          <div class="accom-addr">Check-in 15:00，Check-out 12:00</div>
         </div>
       </a>
       <a class="accom-map-link" href="https://maps.app.goo.gl/wQf8vCKxs9rHzmep7" target="_blank" rel="noopener">
         <div class="accom-card">
           <div class="accom-dates">04.03 – 04.08 · 5 晚</div>
-          <div class="accom-name">GOEN STAY<span class="accom-map-pin">📍</span></div>
-          <div class="accom-addr">澀谷區神宮前 230-8（203室）</div>
+          <div class="accom-name">Airbnb 澀谷表參道<span class="accom-map-pin"></span></div>
+          <div class="accom-addr">Check-in 15:00，Check-out 11:00</div>
         </div>
       </a>
     </div>
@@ -5947,19 +5950,27 @@ body {
       </label>
       <div class="voucher-day-body">
         <div class="voucher-item-wrap">
-          <input type="checkbox" id="vi-0327-1" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0327-1">✈️ 預約航班</label>
-          <div class="voucher-item-body">（待填入航班預約詳情）</div>
+          <input type="checkbox" id="vi-0327-2" class="voucher-item-input">
+          <label class="voucher-item-label" for="vi-0327-2">機場接駁</label>
+          <div class="voucher-item-body">訂單編號：F15018041<br>
+            <a href="https://68666.tw/xkwL" target="_blank">票卡網站</a>（驗證碼 2554）<br>
+           預約時間：3/27 09:00</div>
         </div>
         <div class="voucher-item-wrap">
-          <input type="checkbox" id="vi-0327-2" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0327-2">🚌 機場接駁</label>
-          <div class="voucher-item-body">（待填入機場接駁預約詳情）</div>
+          <input type="checkbox" id="vi-0327-1" class="voucher-item-input">
+          <label class="voucher-item-label" for="vi-0327-1">預約航班</label>
+          <div class="voucher-item-body">訂位代號：5NVUTS<br>
+           班機號碼：BR196  TPE → NRT<br>
+           班機時間：1520 → 1920<br>
+           飛行時間：3小時
+         </div>
         </div>
         <div class="voucher-item-wrap">
           <input type="checkbox" id="vi-0327-3" class="voucher-item-input">
-          <label class="voucher-item-label" for="vi-0327-3">🏠 民宿</label>
-          <div class="voucher-item-body">（待填入 Airbnb 上野 入住憑證詳情）</div>
+          <label class="voucher-item-label" for="vi-0327-3">上野御徒町民宿</label>
+          <div class="voucher-item-body">Airbnb 確認碼：HMBM9DKY5B<br>
+            自助入住方式：智慧門鎖<br>
+            <img src="img/day_1_airbnb_pdf.png" alt="上野民宿住宿憑證" style="width:100%; max-width:100%; height:auto; margin-top:0.5rem; border-radius:6px;"></div>
         </div>
       </div>
 
