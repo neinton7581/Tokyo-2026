@@ -1624,6 +1624,10 @@
     box-shadow: 0 -8px 40px rgba(0,0,0,0.18);
     overflow: hidden;
   }
+  /* Wallet modal 填滿至安全區上緣 */
+  #walletModal .tool-modal-card {
+    max-height: calc(100dvh - env(safe-area-inset-top) - 0.5rem);
+  }
   .tool-modal-header {
     display: flex;
     align-items: center;
@@ -6962,6 +6966,9 @@ body {
   <div class="tool-modal-card">
     <div class="tool-modal-header">
       <span class="tool-modal-title"><i class="fa-solid fa-wallet"></i>Wallet</span>
+      <button onclick="openToolModal('statsModal')" style="background:rgba(224,123,57,0.1);border:1px solid rgba(224,123,57,0.3);border-radius:8px;color:#c96928;font-size:0.72rem;padding:0.3rem 0.7rem;cursor:pointer;display:flex;align-items:center;gap:0.3rem;font-weight:600;">
+        <i class="fa-solid fa-chart-pie"></i> 統計
+      </button>
       <button class="tool-modal-close" onclick="closeToolModal('walletModal')"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="tool-modal-body" style="padding:0; display:flex; flex-direction:column; overflow:hidden;">
@@ -7088,9 +7095,6 @@ body {
       <span style="font-size:0.68rem;color:rgba(101,152,181,0.6);white-space:nowrap;">Gemini Key</span>
       <input class="api-key-input" id="geminiKeyInput" type="password" placeholder="貼上 Gemini API Key">
       <button class="api-key-save" onclick="saveGeminiKey()">儲存</button>
-      <button class="api-key-save" onclick="openToolModal('statsModal')" style="background:rgba(224,123,57,0.12);border-color:rgba(224,123,57,0.3);color:#c96928;">
-        <i class="fa-solid fa-chart-pie"></i> 統計
-      </button>
     </div>
   </div><!-- /tool-modal-card -->
 </div><!-- /walletModal -->
@@ -8073,20 +8077,21 @@ function handleReceiptScan(event) {
       '<div class="receipt-loading-sub">請稍候，這可能需要幾秒鐘</div>' +
     '</div>';
 
+  var blobUrl = URL.createObjectURL(file);
   var reader = new FileReader();
   reader.onload = function(e) {
     var dataUrl = e.target.result;
     var base64 = dataUrl.split(',')[1];
     var mime   = file.type || 'image/jpeg';
-    callGeminiOCR(apiKey, base64, mime, dataUrl);
+    callGeminiOCR(apiKey, base64, mime, blobUrl);
   };
   reader.readAsDataURL(file);
 }
 
-function callGeminiOCR(apiKey, base64, mime, dataUrl) {
-  var prompt = '這是一張日本商店的收據照片。請辨識所有購買品項名稱和對應金額。以JSON格式回傳：{"store":"店名（若看不到則填unknown）","items":[{"name":"品項名稱（翻譯成繁體中文，保持簡短）","amount":金額數字}]}。只回傳JSON，不含任何其他文字或markdown符號。';
+function callGeminiOCR(apiKey, base64, mime, blobUrl) {
+  var prompt = '這是一張日本商店的收據照片。請仔細辨識以下資訊，並以純JSON格式回傳（絕對不可包含任何markdown、程式碼區塊符號或說明文字，只回傳JSON物件本身）：\n{"store":"店名（若看不到則填unknown）","date":"收據上的日期（格式為M/D，例如3月27日請填3/27；若看不到則填null）","total":收據合計金額數字（不含符號，若看不到則填null）,"items":[{"name":"品項名稱（翻譯成繁體中文，保持簡短）","amount":金額數字}]}\n每個品項的amount必須是數字，不含任何文字或符號。';
 
-  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + apiKey, {
+  fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + apiKey, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -8094,7 +8099,7 @@ function callGeminiOCR(apiKey, base64, mime, dataUrl) {
         { text: prompt },
         { inlineData: { mimeType: mime, data: base64 } }
       ]}],
-      generationConfig: { temperature: 0.1, maxOutputTokens: 1024 }
+      generationConfig: { temperature: 0.1, maxOutputTokens: 2048 }
     })
   })
   .then(function(r){ return r.json(); })
@@ -8107,7 +8112,7 @@ function callGeminiOCR(apiKey, base64, mime, dataUrl) {
       throw new Error('API 無回應內容，可能原因：圖片過大、Key 額度不足，或 Key 輸入有誤\n\nAPI 回傳：' + JSON.stringify(data).slice(0, 200));
     }
     var text = data.candidates[0].content.parts[0].text;
-    text = text.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+    text = text.replace(/```json\n?/gi,'').replace(/```\n?/g,'').trim();
     var parsed;
     try {
       parsed = JSON.parse(text);
@@ -8115,7 +8120,17 @@ function callGeminiOCR(apiKey, base64, mime, dataUrl) {
       throw new Error('JSON 解析失敗，AI 回傳內容：' + text.slice(0, 200));
     }
     _receiptItems = parsed.items || [];
-    renderReceiptConfirm(parsed.store || '', dataUrl);
+    // 若辨識到日期，自動選取對應日期選項
+    if (parsed.date && parsed.date !== 'null') {
+      var sel = document.getElementById('receiptDate');
+      for (var i = 0; i < sel.options.length; i++) {
+        if (sel.options[i].value === parsed.date) {
+          sel.selectedIndex = i;
+          break;
+        }
+      }
+    }
+    renderReceiptConfirm(parsed.store || '', blobUrl);
   })
   .catch(function(err) {
     document.getElementById('receiptBody').innerHTML =
