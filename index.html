@@ -6609,9 +6609,18 @@ body {
         <img loading="lazy" src="img/g18_294043add8.jpg" alt="🧈 noix de beurre" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block; border-radius:12px;">
       </div>
       
+<div class="gift-thumb" onclick="openGift('gift-16')" style="border-radius:18px; overflow:hidden; cursor:pointer; -webkit-tap-highlight-color:rgba(120,136,113,0.15);">
+        <img loading="lazy" src="img/hagi_no_shirabe_yu.jpeg" alt="✨ 菓匠三全「萩之月」" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block; border-radius:12px;">
+      </div>
+
+<div class="gift-thumb" onclick="openGift('gift-15')" style="border-radius:18px; overflow:hidden; cursor:pointer; -webkit-tap-highlight-color:rgba(120,136,113,0.15);">
+        <img loading="lazy" src="img/mille_feuille_maison.jpg" alt="📖 Mille-feuille Maison Francais" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block; border-radius:12px;">
+      </div>
+
 <div class="gift-thumb" onclick="openGift('gift-14')" style="border-radius:18px; overflow:hidden; cursor:pointer; -webkit-tap-highlight-color:rgba(120,136,113,0.15);">
         <img loading="lazy" src="img/g19_db48722a0f.jpg" alt="🍬 NUMBER SUGAR" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block; border-radius:12px;">
       </div>
+
 <div class="gift-thumb" onclick="openGift('gift-3')" style="border-radius:18px; overflow:hidden; cursor:pointer; -webkit-tap-highlight-color:rgba(120,136,113,0.15);">
         <img loading="lazy" src="img/g20_c6e794a1c7.jpg" alt="🍁 The Maple Mania" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block; border-radius:12px;">
       </div>
@@ -6623,6 +6632,9 @@ body {
 <div class="gift-thumb" onclick="openGift('gift-1')" style="border-radius:18px; overflow:hidden; cursor:pointer; -webkit-tap-highlight-color:rgba(120,136,113,0.15);">
         <img loading="lazy" src="img/g22_84d3474354.jpg" alt="🥐 SABRINA" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block; border-radius:12px;">
       </div>
+
+
+
       
     </div>
 
@@ -6820,7 +6832,41 @@ body {
       </div>
     </div>
 
-    <!-- 採購小提醒 -->
+<div id="modal-gift-15" class="gift-modal" onclick="closeGift(event, 'gift-15')">
+      <div class="gift-modal-card" onclick="event.stopPropagation()">
+        <img loading="lazy" src="img/mille_feuille_maison.jpg" alt="📖 Mille-feuille Maison Francais" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block; border-radius:14px 14px 0 0;">
+        <div style="padding:1rem 1.1rem 1.3rem;">
+          <div class="gift-item-title">📖 Mille-feuille Maison Francais</div>
+          <div class="gift-item-loc">松屋銀座百貨 B1F（全球唯一實體店）</div>
+          <div class="si-body" style="margin-bottom:0.7rem;">被譽為「伴手禮界的精品字典」！這是全世界只有在銀座松屋百貨才買得到的夢幻千層酥。最大特色是極致奢華的「外文書籍」精裝盒包裝，內含使用講究小麥與奶油反覆折疊烤製而成的法式千層酥，口感極度酥脆且層次分明。絕對是送給重要人士或犒賞自己的最高級選擇。</div>
+          <div class="si-section-title">🌟 必買品項</div>
+          <div class="si-body">
+<strong style="color:#788871; white-space:nowrap;">經典雙拼（香草＆巧克力）</strong>｜最經典的雙口味組合，外層酥脆、內餡濃郁，4入裝約 ¥1,296，8入裝約 ¥2,592<br>
+<strong style="color:#788871; white-space:nowrap;">季節限定口味</strong>｜依季節推出如草莓、檸檬或覆盆子等口味，外文書籍包裝的顏色也會跟著變換，遇到必收<br>
+<strong style="color:#788871; white-space:nowrap;">保存期限</strong>｜常溫約 20 天以上，非常適合帶回台灣慢慢享用</div>
+        
+          <div class="si-note" style="margin-top:0.6rem; padding-top:0.5rem; border-top:1px solid rgba(120,136,113,0.12);">🏬 <strong>購買地點</strong>｜松屋銀座百貨 B1F（吃完 Centre The Bakery 吐司順步過去買！）</div></div>
+        <button onclick="closeGiftBtn('gift-15')" class="gift-close-btn">✕</button>
+      </div>
+    </div>
+
+<div id="modal-gift-16" class="gift-modal" onclick="closeGift(event, 'gift-16')">
+      <div class="gift-modal-card" onclick="event.stopPropagation()">
+        <img loading="lazy" src="img/hagi_no_shirabe_yu.jpeg" alt="✨ 菓匠三全「萩之月」" style="width:100%; aspect-ratio:1/1; object-fit:cover; display:block; border-radius:14px 14px 0 0;">
+        <div style="padding:1rem 1.1rem 1.3rem;">
+          <div class="gift-item-title">✨ 菓匠三全「萩之月」</div>
+          <div class="gift-item-loc">1F グランスタ東京 (Gransta 改札內)</div>
+          <div class="si-body" style="margin-bottom:0.7rem;">萩の調 釉是由仙台國寶級名產「萩之月」老舖（菓匠三全）專為東京車站打造的限定甜點！以獨特的「市松圖紋」可可餅乾，夾入滑順且香氣濃郁的烘焙堅果焦糖奶油。外包裝設計極具現代與高級感，是非常體面且極難撞款的東京車站限定伴手禮。</div>
+          <div class="si-section-title">🌟 必買品項</div>
+          <div class="si-body"><strong style="color:#788871; white-space:nowrap;">萩の調 煌</strong>｜東京限定「白色版萩之月」！雪白鬆軟的海綿蛋糕包裹著以純白蛋黃熬煮的滑順「白色卡士達醬」，口感綿密輕柔。<br>
+<strong style="color:#788871; white-space:nowrap;">萩の調 釉 經典原味</strong>｜以原味與可可交織的「市松圖紋餅乾」為中心，內餡藏著深焙堅果熬製的焦糖奶油，外層再包覆酥脆的貓舌餅乾，層次極度豐富！<br>
+<strong style="color:#788871; white-space:nowrap;">萩の調 釉 日本茶口味</strong>｜將最外層換成了綠色的「煎茶貓舌餅乾」，中間夾著可可市松餅乾與特製的「煎茶醬」，微苦回甘的日式茶香與巧克力完美融合！<br>
+<strong style="color:#788871; white-space:nowrap;">保存期限</strong>｜常溫約 14 天，免冷藏，非常適合塞進行李箱帶回台灣</div>
+        
+          <div class="si-note" style="margin-top:0.6rem; padding-top:0.5rem; border-top:1px solid rgba(120,136,113,0.12);">🏬 <strong>購買地點</strong>｜東京車站 1F Gransta Tokyo（逼卡進站後的 JR 站內區域，可以跟 SABRINA 一起買！）</div></div>
+        <button onclick="closeGiftBtn('gift-16')" class="gift-close-btn">✕</button>
+      </div>
+    </div>    
     
 <div id="modal-gift-3" class="gift-modal" onclick="closeGift(event, 'gift-3')">
       <div class="gift-modal-card" onclick="event.stopPropagation()">
@@ -6876,7 +6922,7 @@ body {
     <div style="background:rgba(120,136,113,0.06); border:1px solid rgba(120,136,113,0.15); border-radius:10px; padding:1.2rem 1.4rem; margin-bottom:2rem;">
       <div class="si-section-title" style="margin-top:0;">💡 採購小提醒</div>
       <div class="si-body">
-        <strong style="color:#788871; white-space:nowrap;">機場購買品項</strong>｜以下品項可以考慮到機場再購買 Yoku Moku、Calbee Moon Potato、Tokyo Banana、LeTAO THÉNOIR、東京晴空戀巧克力（Tokyo Campanella）<br>
+        <strong style="color:#788871; white-space:nowrap;">機場購買品項</strong>｜以下品項可以考慮到機場再購買 Yoku Moku、Calbee Moon Potato、菓匠三全 萩の月、LeTAO THÉNOIR、東京晴空戀巧克力（Tokyo Campanella）、Tokyo Banana<br>
         <strong style="color:#788871; white-space:nowrap;">退稅</strong>｜各店滿 ¥5,000 未稅可憑護照辦理；部分食品不退稅，請確認<br>
         <strong style="color:#788871; white-space:nowrap;">保存期限注意</strong>｜喫茶店・BRULEE MERIZE 等新鮮塔類建議 3–5 天內享用；餅乾糖果類 14–60 天，可安心帶回<br>
         <strong style="color:#788871; white-space:nowrap;">行李建議</strong>｜餅乾類建議放手提行李（易碎）；Calbee 薯片可放托運；Yoku Moku 鐵罐較重，分散放置
@@ -6889,9 +6935,9 @@ body {
           <strong style="color:#788871; white-space:nowrap;">Step 2 — 銀座三越 B2F</strong>｜走兩分鐘到三越百貨，購買 noix de beurre 剛出爐的現烤費南雪<br>
           <strong style="color:#788871; white-space:nowrap;">Step 3 — 站外 / 丸之內南口的新國際大樓 1F</strong>｜從銀座往東京車站方向走，經過丸之內側，直接把 NUMBER SUGAR 手工焦糖牛奶糖買齊<br>
           <strong style="color:#788871; white-space:nowrap;">Step 4 — 站外 / 八重洲北口 1F Tokyo Gift Palette</strong>｜穿越車站一樓通道來到八重洲側（此時尚未進站），購買 BRULEE MERIZE、pista &amp; tokyo、Press Butter Sand<br>
-          <strong style="color:#788871; white-space:nowrap;">Step 5 — 逼卡進站！1F グランスタ東京 (Gransta)</strong>｜刷卡進入 JR 站內！尋找 1F 區域，拿下 SABRINA 花朵餅乾與 The Maple Mania 楓糖男孩<br>
+          <strong style="color:#788871; white-space:nowrap;">Step 5 — 逼卡進站！1F グランスタ東京 (Gransta)</strong>｜刷卡進入 JR 站內！尋找 1F 區域，拿下 SABRINA 花朵餅乾、The Maple Mania 楓糖男孩，以及絕美的菓匠三全「萩の調 釉」夾心餅乾<br>
           <strong style="color:#788871; white-space:nowrap;">Step 6 — 站內 / B1F グランスタ東京 (Gransta)</strong>｜走到地下一樓，購買文庫本「喫茶店に恋して」，並到 Square Zero 廣場搶下「岡田謹製 茶織屋」快閃店<br>
-          <strong style="color:#788871; white-space:nowrap;">Step 7 — 取行李 → 候車</strong>｜最晚 16:00 結束採購，取回行李，16:30 前往 N'EX 月台候車（把 Yoku Moku、Calbee、Tokyo Banana 留到成田機場免稅店買，減輕提重物的負擔！）<br>
+          <strong style="color:#788871; white-space:nowrap;">Step 7 — 取行李 → 候車</strong>｜最晚 16:00 結束採購，取回行李，16:30 前往 N'EX 月台候車（把 Yoku Moku、Calbee、Tokyo Banana、以及原版黃色的「萩の月」留到成田機場免稅店買，減輕提重物的負擔！）<br>
         </div>
        </div>
       </div>
