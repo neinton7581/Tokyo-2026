@@ -1905,6 +1905,95 @@
   }
   .memo-add-btn:active { background: #4a7a9b; }
 
+  /* ── 願望清單 ── */
+  .wl-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0.5rem;
+    font-size: 0.78rem;
+  }
+  .wl-table thead th {
+    text-align: left;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(101,152,181,0.55);
+    padding: 0 0.4rem 0.6rem;
+    border-bottom: 1px solid rgba(101,152,181,0.15);
+  }
+  .wl-table tbody tr {
+    border-bottom: 1px solid rgba(101,152,181,0.08);
+  }
+  .wl-table tbody tr:last-child { border-bottom: none; }
+  .wl-table tbody td {
+    padding: 0.55rem 0.4rem;
+    color: #4a6a82;
+    vertical-align: middle;
+    line-height: 1.5;
+  }
+  .wl-table tbody td:first-child { font-weight: 600; }
+  .wl-table tbody td.wl-price { color: #788871; font-size: 0.72rem; white-space: nowrap; }
+  .wl-table tbody td.wl-where { color: rgba(101,152,181,0.65); font-size: 0.72rem; }
+  .wl-del-btn {
+    background: none;
+    border: none;
+    color: rgba(101,152,181,0.35);
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0.2rem 0.3rem;
+    border-radius: 6px;
+    line-height: 1;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .wl-del-btn:hover { color: #c0503a; background: rgba(192,80,58,0.07); }
+  .wl-empty {
+    text-align: center;
+    color: rgba(101,152,181,0.35);
+    font-size: 0.78rem;
+    padding: 1.8rem 0;
+  }
+  .wl-add-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.4fr auto;
+    gap: 0.4rem;
+    margin-top: 1.2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(101,152,181,0.12);
+    align-items: center;
+  }
+  .wl-input {
+    border: 1px solid rgba(101,152,181,0.25);
+    border-radius: 10px;
+    padding: 0.5rem 0.7rem;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.78rem;
+    background: transparent;
+    color: #4a7a9b;
+    outline: none;
+    min-width: 0;
+  }
+  .wl-input::placeholder { color: rgba(101,152,181,0.35); }
+  .wl-input:focus { border-color: #6598b5; }
+  .wl-add-btn {
+    background: #6598b5;
+    color: #fff8ef;
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem 0.8rem;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .wl-add-btn:active { background: #4a7a9b; }
+  @media (max-width: 480px) {
+    .wl-add-row { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; }
+    .wl-add-btn { grid-column: 1 / -1; }
+  }
+
   /* ── INFO modal ── */
   .info-card {
     background: rgba(101,152,181,0.05);
@@ -6120,6 +6209,19 @@ body {
                   </div>
                   <div class="si-note">💡 BR195 起飛 20:40，Check-in 截止約 19:40，建議安檢後輕鬆選擇喜歡的餐廳用餐｜機場餐廳接受信用卡｜候機室免稅店有多款伴手禮可最後補購</div>
                 </div></div>
+                <input type="checkbox" id="si-d13-7" class="si-input"><label class="spot-info-toggle" for="si-d13-7">🎁 伴手禮最後採購<span class="si-arrow">▾</span></label>
+                <div class="spot-info-body"><div class="spot-info-content">
+                  <div class="si-section-title">🛍️ 成田機場限定 / 機場必買清單</div>
+                  <div class="si-body">
+                    <strong style="color:#788871; white-space:nowrap;">🍪 Yoku Moku（ヨックモック）</strong>｜奶油捲餅（シガール）是最具代表性的日本西式伴手禮，奶油香氣濃郁、口感酥脆。成田機場第一航廈有設點，價格與百貨相同但省去市區採購重量，建議留到此處購買。¥1,500–3,000<br>
+                    <strong style="color:#788871; white-space:nowrap;">🥔 Calbee Moon Potato（カルビー じゃがポックル）</strong>｜北海道限定口味洋芋條，成田機場免稅店有售，是機場採購 CP 值最高的零食伴手禮之一。¥600–900<br>
+                    <strong style="color:#788871; white-space:nowrap;">🍰 菓匠三全 萩の月</strong>｜宮城縣知名菓子，鬆軟卡士達奶油外包裹一層蛋糕，綿密入口即化。成田機場有販售，在東京市區不易購得，是機場限定補貨的好選擇。¥1,800 / 6入<br>
+                    <strong style="color:#788871; white-space:nowrap;">🍫 LeTAO THÉNOIR（ルタオ・テノワール）</strong>｜北海道小樽名店 LeTAO 的巧克力夾心餅乾，可可風味濃郁、口感紮實。成田機場第一航廈內有設點，是回程必掃的北海道土產之一。¥1,200–1,800<br>
+                    <strong style="color:#788871; white-space:nowrap;">🍫 東京晴空戀巧克力（Tokyo Campanella）</strong>｜以東京晴空塔為主題設計的伴手禮巧克力，造型精緻、口味多樣，成田機場及大型車站均有販售，是視覺感強烈的人氣禮盒。¥1,200–2,000<br>
+                    <strong style="color:#788871; white-space:nowrap;">🍌 Tokyo Banana（東京バナナ）</strong>｜東京最具代表性的伴手禮之一，香蕉口味海綿蛋糕夾入卡士達奶油，口感柔軟。成田機場各航廈均有設點，保存期限約 7 天，是最後補購的經典選項。¥756–1,080 / 8入
+                  </div>
+                  <div class="si-note">💡 建議在 Check-in 完成並通過安全檢查後，直接前往免稅候機區的伴手禮店採購，可使用信用卡刷卡，部分商品出示護照可享退稅優惠｜重量較重的商品（如鐵罐禮盒）建議托運行李已送出後再購買，放入隨身行李帶上機</div>
+                </div></div>
               </div>
 
               <!-- 20:40 起飛 -->
@@ -6150,7 +6252,8 @@ body {
           <div class="accom-dates">03.27 – 03.31 · 4 晚</div>
           <div class="accom-name">Airbnb 上野御徒町<span class="accom-map-pin"></span></div>
           <div class="accom-addr">Check-in 16:00<br>
-            Check-out 11:00</div>
+            Check-out 11:00<br>
+            東京都台東区上野 5-4-4</div>
         </div>
       </a>
       <a class="accom-map-link" href="https://maps.app.goo.gl/R1mW4KPmV3w73XKF8" target="_blank" rel="noopener">
@@ -6174,7 +6277,8 @@ body {
           <div class="accom-dates">04.03 – 04.08 · 5 晚</div>
           <div class="accom-name">Airbnb 澀谷表參道<span class="accom-map-pin"></span></div>
           <div class="accom-addr">Check-in 15:00<br>
-            Check-out 11:00</div>
+            Check-out 11:00<br>
+            東京都渋谷区神宮前 2-30-8</div>
         </div>
       </a>
     </div>
@@ -7001,6 +7105,7 @@ body {
       <div class="lists-tabs">
         <button class="lists-tab-btn active" onclick="switchListsTab('memo',this)"><i class="fa-solid fa-note-sticky"></i> 備忘錄</button>
         <button class="lists-tab-btn" onclick="switchListsTab('checklist',this)"><i class="fa-solid fa-square-check"></i> 行前清單</button>
+        <button class="lists-tab-btn" onclick="switchListsTab('wishlist',this)"><i class="fa-solid fa-star"></i> 願望清單</button>
       </div>
 
       <!-- checklist pane -->
@@ -7018,6 +7123,17 @@ body {
             <option value="✏️ 自訂">✏️ 自訂</option>
           </select>
           <button class="cl-add-btn" onclick="addClItem()" style="flex:0 0 auto;"><i class="fa-solid fa-plus"></i> 新增</button>
+        </div>
+      </div>
+
+      <!-- wishlist pane -->
+      <div class="lists-pane" id="pane-wishlist">
+        <div id="wlList"></div>
+        <div class="wl-add-row">
+          <input class="wl-input" id="wlName" placeholder="品項名稱 *" onkeydown="if(event.key==='Enter')addWlItem()">
+          <input class="wl-input" id="wlPrice" placeholder="預期價格" onkeydown="if(event.key==='Enter')addWlItem()">
+          <input class="wl-input" id="wlWhere" placeholder="哪裡買" onkeydown="if(event.key==='Enter')addWlItem()">
+          <button class="wl-add-btn" onclick="addWlItem()"><i class="fa-solid fa-plus"></i> 新增</button>
         </div>
       </div>
 
@@ -7393,7 +7509,7 @@ function openToolModal(id) {
   fabOpen = false;
   document.getElementById('fabMenu').classList.remove('open');
   document.getElementById('fabMain').classList.remove('open');
-  if (id === 'listsModal') { renderMemoList(); renderClList(); }
+  if (id === 'listsModal') { renderMemoList(); renderClList(); renderWlList(); }
   if (id === 'walletModal') { renderLedger(); }
   if (id === 'giftsModal') { renderGifts(); }
   if (id === 'settingsModal') { loadRate(); loadGeminiKeyPlaceholder(); renderFbAuthStatus(); }
@@ -7416,6 +7532,62 @@ function switchListsTab(name, btn) {
   document.querySelectorAll('.lists-pane').forEach(function(p){ p.classList.remove('active'); });
   btn.classList.add('active');
   document.getElementById('pane-' + name).classList.add('active');
+}
+
+// ══════════════════════════════════════
+//  WISHLIST（願望清單）
+// ══════════════════════════════════════
+function loadWlData() {
+  try { return JSON.parse(localStorage.getItem('tokyo_wishlist') || '[]'); } catch(e) { return []; }
+}
+function saveWlData(d) { localStorage.setItem('tokyo_wishlist', JSON.stringify(d)); }
+
+function renderWlList() {
+  var data = loadWlData();
+  var el = document.getElementById('wlList');
+  if (!el) return;
+  if (data.length === 0) {
+    el.innerHTML = '<div class="wl-empty"><i class="fa-regular fa-star" style="font-size:1.4rem;display:block;margin-bottom:0.5rem;opacity:0.4;"></i>還沒有願望清單</div>';
+    return;
+  }
+  var rows = data.map(function(item, i) {
+    return '<tr>' +
+      '<td>' + escHtml(item.name) + '</td>' +
+      '<td class="wl-price">' + (item.price ? escHtml(item.price) : '<span style="opacity:0.3">—</span>') + '</td>' +
+      '<td class="wl-where">' + (item.where ? escHtml(item.where) : '<span style="opacity:0.3">—</span>') + '</td>' +
+      '<td><button class="wl-del-btn" onclick="deleteWlItem(' + i + ')" title="刪除"><i class="fa-solid fa-xmark"></i></button></td>' +
+    '</tr>';
+  }).join('');
+  el.innerHTML = '<table class="wl-table">' +
+    '<thead><tr><th>品項</th><th>預期價格</th><th>哪裡買</th><th></th></tr></thead>' +
+    '<tbody>' + rows + '</tbody></table>';
+}
+
+function addWlItem() {
+  var name = (document.getElementById('wlName').value || '').trim();
+  if (!name) {
+    document.getElementById('wlName').focus();
+    document.getElementById('wlName').style.borderColor = '#c0503a';
+    setTimeout(function(){ document.getElementById('wlName').style.borderColor = ''; }, 1200);
+    return;
+  }
+  var price = (document.getElementById('wlPrice').value || '').trim();
+  var where = (document.getElementById('wlWhere').value || '').trim();
+  var data = loadWlData();
+  data.push({ name: name, price: price, where: where });
+  saveWlData(data);
+  document.getElementById('wlName').value = '';
+  document.getElementById('wlPrice').value = '';
+  document.getElementById('wlWhere').value = '';
+  document.getElementById('wlName').focus();
+  renderWlList();
+}
+
+function deleteWlItem(i) {
+  var data = loadWlData();
+  data.splice(i, 1);
+  saveWlData(data);
+  renderWlList();
 }
 
 // ══════════════════════════════════════
@@ -8732,7 +8904,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var SYNC = db.collection('sync');
 
   // ── 狀態 ──
-  var _cache = { cl: null, memo: null, ledger: null, gifts: null, rate: null };
+  var _cache = { cl: null, memo: null, ledger: null, gifts: null, rate: null, wishlist: null };
   var _isAuthorized   = false; // 只有登入的帳號才為 true
   var _listenersStarted = false;
 
@@ -8777,6 +8949,15 @@ document.addEventListener('DOMContentLoaded', function() {
     _cache.gifts = data;
     localStorage.setItem('tokyo_gifts', JSON.stringify(data));
     if (_canSync()) SYNC.doc('gifts').set({ items: data }).catch(function() {});
+  };
+  window.loadWlData = function() {
+    return _cache.wishlist !== null ? _cache.wishlist
+      : (function(){ try { return JSON.parse(localStorage.getItem('tokyo_wishlist') || '[]'); } catch(e) { return []; } })();
+  };
+  window.saveWlData = function(data) {
+    _cache.wishlist = data;
+    localStorage.setItem('tokyo_wishlist', JSON.stringify(data));
+    if (_canSync()) SYNC.doc('wishlist').set({ items: data }).catch(function() {});
   };
   window.saveRate = function() {
     var val = document.getElementById('rateInput').value;
@@ -8837,6 +9018,14 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }, function() {});
 
+    SYNC.doc('wishlist').onSnapshot(function(snap) {
+      if (snap.exists && Array.isArray(snap.data().items)) {
+        _cache.wishlist = snap.data().items;
+        localStorage.setItem('tokyo_wishlist', JSON.stringify(_cache.wishlist));
+        if (document.getElementById('wlList')) renderWlList();
+      }
+    }, function() {});
+
     SYNC.doc('settings').onSnapshot(function(snap) {
       if (snap.exists && snap.data().rate) {
         _cache.rate = snap.data().rate;
@@ -8856,10 +9045,11 @@ document.addEventListener('DOMContentLoaded', function() {
     _isAuthorized = !!user;
     if (user && !_listenersStarted) {
       // 登入後才執行遷移與開始即時同步
-      _migrateKey('cl',     'tokyo_cl',     []);
-      _migrateKey('memo',   'tokyo_memo',   []);
-      _migrateKey('ledger', 'tokyo_ledger', []);
-      _migrateKey('gifts',  'tokyo_gifts',  []);
+      _migrateKey('cl',       'tokyo_cl',       []);
+      _migrateKey('memo',     'tokyo_memo',     []);
+      _migrateKey('ledger',   'tokyo_ledger',   []);
+      _migrateKey('gifts',    'tokyo_gifts',    []);
+      _migrateKey('wishlist', 'tokyo_wishlist', []);
       SYNC.doc('settings').get().then(function(snap) {
         if (!snap.exists) {
           var r = localStorage.getItem('tokyo_rate') || '0.215';
