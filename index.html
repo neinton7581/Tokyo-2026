@@ -7609,7 +7609,7 @@ function openToolModal(id) {
   document.getElementById('fabMenu').classList.remove('open');
   document.getElementById('fabMain').classList.remove('open');
   if (id === 'listsModal') { renderMemoList(); renderClList(); renderWlList(); }
-  if (id === 'walletModal') { renderLedger(); }
+  if (id === 'walletModal') { renderLedger(); setLedgerDateToToday(); }
   if (id === 'giftsModal') { renderGifts(); }
   if (id === 'settingsModal') { loadRate(); loadGeminiKeyPlaceholder(); renderFbAuthStatus(); }
 }
@@ -8008,7 +8008,7 @@ function renderLedger() {
     var dayTwd = dateItems.reduce(function(s, i){ return s + itemToTwd(i, rate); }, 0);
     var dgid = 'ldg-' + date.replace(/\//g,'-');
 
-    html += '<div class="ledger-date-group" id="' + dgid + '">';
+    html += '<div class="ledger-date-group collapsed" id="' + dgid + '">';
     html += '<div class="ledger-date-header" onclick="toggleLedgerGroup(\'' + dgid + '\')">'
       + '<span class="ledger-date-label">' + escHtml(date) + '</span>'
       + '<span style="display:flex;align-items:center;gap:0.5rem;">'
@@ -8176,6 +8176,18 @@ function editItemName(id, event) {
     if (e.key === 'Enter')  { e.preventDefault(); inp.blur(); }
     if (e.key === 'Escape') { inp.value = origName; inp.blur(); }
   });
+}
+
+function setLedgerDateToToday() {
+  var sel = document.getElementById('ledgerDate');
+  if (!sel) return;
+  var t = new Date();
+  var key = (t.getMonth()+1) + '/' + t.getDate();
+  var found = false;
+  for (var i = 0; i < sel.options.length; i++) {
+    if (sel.options[i].value === key) { sel.value = key; found = true; break; }
+  }
+  if (!found) sel.value = '4/8';
 }
 
 function toggleLedgerGroup(gid) {
