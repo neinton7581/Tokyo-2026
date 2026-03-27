@@ -8720,7 +8720,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var pay   = document.getElementById('ledgerPayMethod') ? document.getElementById('ledgerPayMethod').value : '現金';
     if (!name || isNaN(amt) || amt === 0) { alert('請填寫品項與金額'); return; }
     var data = getLedger();
-    data.unshift({ name:name, store:store, jpy:Math.round(amt), date:date, cat:cat, pay:pay, thumb:window._pendingThumb||null, id:Date.now() });
+    data.unshift({ name:name, store:store, amt:Math.round(amt), currency:_ledgerCurrency, jpy:_ledgerCurrency==='JPY'?Math.round(amt):null, date:date, cat:cat, pay:pay, thumb:window._pendingThumb||null, id:Date.now() });
     saveLedgerData(data);
     document.getElementById('ledgerName').value = '';
     document.getElementById('ledgerAmt').value = '';
