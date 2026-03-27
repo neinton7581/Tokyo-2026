@@ -7364,8 +7364,8 @@ body {
           <input class="wallet-input" id="ledgerName" placeholder="品項名稱" type="text">
         </div>
         <div class="wallet-field-row">
-          <button class="currency-toggle-btn" id="currencyToggle" onclick="toggleLedgerCurrency()">¥ JPY</button>
-          <input class="wallet-input" id="ledgerAmt" placeholder="日幣金額 ¥" type="number" inputmode="decimal" style="flex:1;">
+          <button class="currency-toggle-btn twd" id="currencyToggle" onclick="toggleLedgerCurrency()">NT$ TWD</button>
+          <input class="wallet-input" id="ledgerAmt" placeholder="台幣金額 NT$" type="number" inputmode="decimal" style="flex:1;">
           <img id="thumbPreview" class="wallet-thumb-preview" alt="預覽" onclick="openLightbox(this.src)">
         </div>
         <div class="wallet-field-row">
@@ -7906,7 +7906,7 @@ function getLedger() {
 }
 function saveLedgerData(d) { localStorage.setItem('tokyo_ledger', JSON.stringify(d)); }
 
-var _ledgerCurrency = 'JPY';
+var _ledgerCurrency = 'TWD';
 
 function toggleLedgerCurrency() {
   _ledgerCurrency = _ledgerCurrency === 'JPY' ? 'TWD' : 'JPY';
