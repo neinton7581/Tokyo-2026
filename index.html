@@ -2216,6 +2216,22 @@
     padding: 0.6rem 1rem 0.5rem;
     border-bottom: 1px solid rgba(101,152,181,0.12);
   }
+  .calc-toggle-header {
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; padding: 0.1rem 0 0.3rem;
+    user-select: none; -webkit-tap-highlight-color: transparent;
+  }
+  .calc-toggle-label {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.6rem; font-weight: 600; color: #6598b5;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .calc-toggle-arrow {
+    font-size: 0.6rem; color: rgba(101,152,181,0.5);
+    transition: transform 0.2s;
+  }
+  .wallet-calc-pane.collapsed .calc-toggle-arrow { transform: rotate(-90deg); }
+  .wallet-calc-pane.collapsed .calc-body { display: none; }
   .wallet-ledger-pane {
     flex: 1;
     overflow-y: auto;
@@ -7290,7 +7306,12 @@ body {
       <div class="wallet-split">
 
       <!-- 上方：匯率 + 計算機 -->
-      <div class="wallet-calc-pane">
+      <div class="wallet-calc-pane collapsed" id="calcPane">
+      <div class="calc-toggle-header" onclick="toggleCalcPane()">
+        <span class="calc-toggle-label">🧮 計算機</span>
+        <i class="fa-solid fa-chevron-down calc-toggle-arrow"></i>
+      </div>
+      <div class="calc-body">
       <!-- 計算機 -->
       <div class="calc-display">
         <div class="calc-expr" id="calcExpr">—</div>
@@ -7326,6 +7347,7 @@ body {
         <button class="calc-btn span2" onclick="calcBackspace()">⌫</button>
         <button class="calc-btn op span2" onclick="useCalcInLedger()"><i class="fa-solid fa-arrow-down"></i> 加入記帳</button>
       </div>
+      </div><!-- /calc-body -->
       </div><!-- /wallet-calc-pane -->
 
       <!-- 下方：記帳輸入 + 列表（可捲動） -->
@@ -7813,6 +7835,10 @@ function getRate() {
 // ══════════════════════════════════════
 //  WALLET — calculator
 // ══════════════════════════════════════
+function toggleCalcPane() {
+  document.getElementById('calcPane').classList.toggle('collapsed');
+}
+
 var _calcExpr = '';
 var _calcVal = 0;
 function calcInput(ch) {
@@ -7968,9 +7994,17 @@ function renderLedger() {
   });
   dateOrder = dateOrder.filter(function(v, i, a){ return a.indexOf(v) === i; });
 
+  // 日期排序：最接近今天的在前（依絕對距離升冪）
+  var _today = new Date();
+  var _todayVal = (_today.getMonth()+1) * 100 + _today.getDate();
+  function _parseDVal(d) { var p = (d||'').split('/'); return (parseInt(p[0])||0)*100 + (parseInt(p[1])||0); }
+  dateOrder.sort(function(a, b) {
+    return Math.abs(_parseDVal(a) - _todayVal) - Math.abs(_parseDVal(b) - _todayVal);
+  });
+
   var html = '';
   dateOrder.forEach(function(date) {
-    var dateItems = dateGroups[date];
+    var dateItems = dateGroups[date].slice().sort(function(a, b){ return (a.id||0) - (b.id||0); });
     var dayTwd = dateItems.reduce(function(s, i){ return s + itemToTwd(i, rate); }, 0);
     var dgid = 'ldg-' + date.replace(/\//g,'-');
 
