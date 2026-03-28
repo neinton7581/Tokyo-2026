@@ -8974,7 +8974,7 @@ function renderReceiptItemRows() {
         '<input class="receipt-row-qty" value="' + qty + '" type="number" min="1" oninput="updateReceiptRowAmt(' + i + ',null,this.value)">' +
         '<span style="font-size:0.75rem;color:rgba(101,152,181,0.6);">@ ¥</span>' +
         '<input class="receipt-row-unit" value="' + unitPrice + '" type="number" oninput="updateReceiptRowAmt(' + i + ',this.value,null)">' +
-        '<span class="receipt-row-total">＝ ¥' + total.toLocaleString() + '</span>' +
+        '<span class="receipt-row-total" id="receipt-total-' + i + '">＝ ¥' + total.toLocaleString() + '</span>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -8983,8 +8983,10 @@ function renderReceiptItemRows() {
 function updateReceiptRowAmt(i, unitPrice, qty) {
   if (unitPrice !== null) _receiptItems[i].unit_price = parseFloat(unitPrice) || 0;
   if (qty !== null) _receiptItems[i].qty = parseInt(qty) || 1;
-  _receiptItems[i].amount = Math.round((_receiptItems[i].qty || 1) * (_receiptItems[i].unit_price || 0));
-  document.getElementById('receiptItemList').innerHTML = renderReceiptItemRows();
+  var total = Math.round((_receiptItems[i].qty || 1) * (_receiptItems[i].unit_price || 0));
+  _receiptItems[i].amount = total;
+  var el = document.getElementById('receipt-total-' + i);
+  if (el) el.textContent = '＝ ¥' + total.toLocaleString();
   updateReceiptSaveBtn();
 }
 
