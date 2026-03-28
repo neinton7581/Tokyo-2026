@@ -2725,6 +2725,20 @@ body {
   display:flex; align-items:center; justify-content:center; gap:0.4rem; font-weight:600;
 }
 .wallet-scan-btn:active { background:rgba(224,123,57,0.22); }
+.scan-source-wrap { flex:1; position:relative; display:flex; }
+.scan-source-popup {
+  display:none; position:absolute; bottom:calc(100% + 6px); left:0; right:0;
+  background:#fff; border:1px solid rgba(224,123,57,0.35); border-radius:10px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.12); overflow:hidden; z-index:100;
+}
+.scan-source-popup.open { display:block; }
+.scan-source-opt {
+  display:flex; align-items:center; gap:0.5rem;
+  padding:0.7rem 1rem; font-size:0.78rem; font-weight:600; color:#c96928;
+  cursor:pointer; border:none; background:none; width:100%; text-align:left;
+}
+.scan-source-opt:active { background:rgba(224,123,57,0.1); }
+.scan-source-opt + .scan-source-opt { border-top:1px solid rgba(224,123,57,0.15); }
 
 /* ══ 收據確認全螢幕 ══ */
 .receipt-overlay {
@@ -7403,11 +7417,18 @@ body {
           <button class="wallet-photo-btn" onclick="document.getElementById('photoInput').click()">
             <i class="fa-solid fa-camera"></i> 附圖
           </button>
-          <button class="wallet-scan-btn" onclick="document.getElementById('scanInput').click()">
-            <i class="fa-solid fa-receipt"></i> 掃描收據
-          </button>
+          <div class="scan-source-wrap">
+            <button class="wallet-scan-btn" onclick="toggleScanSourcePopup(event)">
+              <i class="fa-solid fa-receipt"></i> 掃描收據
+            </button>
+            <div class="scan-source-popup" id="scanSourcePopup">
+              <button class="scan-source-opt" onclick="triggerScanSource('camera')"><i class="fa-solid fa-camera"></i> 直接拍照</button>
+              <button class="scan-source-opt" onclick="triggerScanSource('album')"><i class="fa-solid fa-images"></i> 從相簿選取</button>
+            </div>
+          </div>
           <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(event)">
-          <input type="file" id="scanInput" accept="image/*" capture="environment" style="display:none" onchange="handleReceiptScan(event)">
+          <input type="file" id="scanInputCamera" accept="image/*" capture="environment" style="display:none" onchange="handleReceiptScan(event)">
+          <input type="file" id="scanInputAlbum" accept="image/*" style="display:none" onchange="handleReceiptScan(event)">
         </div>
         <button class="wallet-save-btn" onclick="saveLedger()"><i class="fa-solid fa-floppy-disk"></i> 儲存記帳</button>
       </div>
@@ -8783,6 +8804,20 @@ document.addEventListener('DOMContentLoaded', function() {
 // ══════════════════════════════════════
 var _receiptItems = [];
 var _receiptStoreName = '';
+
+function toggleScanSourcePopup(e) {
+  e.stopPropagation();
+  var popup = document.getElementById('scanSourcePopup');
+  popup.classList.toggle('open');
+}
+function triggerScanSource(src) {
+  document.getElementById('scanSourcePopup').classList.remove('open');
+  document.getElementById(src === 'camera' ? 'scanInputCamera' : 'scanInputAlbum').click();
+}
+document.addEventListener('click', function() {
+  var popup = document.getElementById('scanSourcePopup');
+  if (popup) popup.classList.remove('open');
+});
 
 function handleReceiptScan(event) {
   var file = event.target.files[0];
