@@ -8063,15 +8063,15 @@ function renderLedger() {
     });
     storeOrder = storeOrder.filter(function(v, i, a){ return a.indexOf(v) === i; });
 
-    storeOrder.forEach(function(store) {
+    storeOrder.forEach(function(store, si) {
       var storeItems = storeGroups[store];
       var storeTwd = storeItems.reduce(function(s, i){ return s + itemToTwd(i, rate); }, 0);
-      var sgid = dgid + '-s-' + store.replace(/[^a-zA-Z0-9]/g,'_');
+      var sgid = dgid + '-s-' + si;
 
       var dEnc = encodeURIComponent(date);
       var sEnc = encodeURIComponent(store);
 
-      html += '<div class="ledger-store-group" id="' + sgid + '">';
+      html += '<div class="ledger-store-group collapsed" id="' + sgid + '">';
       html += '<div class="ledger-store-header" onclick="toggleLedgerGroup(\'' + sgid + '\')">'
         // 店名 — 只有點到文字才觸發編輯，stopPropagation 避免同時 toggle
         + '<span class="ledger-store-name ledger-editable" onclick="editStoreName(\'' + dEnc + '\',\'' + sEnc + '\',event)">'
