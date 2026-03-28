@@ -8859,7 +8859,7 @@ function callGeminiOCR(apiKey, base64, mime, blobUrl) {
         { text: prompt },
         { inlineData: { mimeType: mime, data: base64 } }
       ]}],
-      generationConfig: { temperature: 0.1, maxOutputTokens: 2048 }
+      generationConfig: { temperature: 0.1, maxOutputTokens: 8192 }
     })
   })
   .then(function(r){ return r.json(); })
@@ -8880,7 +8880,20 @@ function callGeminiOCR(apiKey, base64, mime, blobUrl) {
     try {
       parsed = JSON.parse(text);
     } catch(e) {
-      throw new Error('JSON 解析失敗，AI 回傳內容：' + text.slice(0, 200));
+      // JSON 被截斷時，嘗試移除不完整的最後一筆並補上缺少的 ]} 來修復
+      var repaired = text.replace(/,\s*\{[^}]*$/, '');
+      var missing = '';
+      var opens  = (repaired.match(/\[/g) || []).length;
+      var closes = (repaired.match(/\]/g) || []).length;
+      for (var _i = 0; _i < opens - closes; _i++) missing += ']';
+      var oOpens  = (repaired.match(/\{/g) || []).length;
+      var oCloses = (repaired.match(/\}/g) || []).length;
+      for (var _j = 0; _j < oOpens - oCloses; _j++) missing += '}';
+      try {
+        parsed = JSON.parse(repaired + missing);
+      } catch(e2) {
+        throw new Error('JSON 解析失敗，AI 回傳內容：' + text.slice(0, 200));
+      }
     }
     _receiptItems = parsed.items || [];
     // 若辨識到日期，自動選取對應日期選項
