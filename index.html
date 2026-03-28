@@ -8838,6 +8838,9 @@ function callGeminiOCR(apiKey, base64, mime, blobUrl) {
     }
     var text = data.candidates[0].content.parts[0].text;
     text = text.replace(/```json\n?/gi,'').replace(/```\n?/g,'').trim();
+    // 擷取第一個 { 到最後一個 }，避免 Gemini 在 JSON 前後夾帶說明文字
+    var jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (jsonMatch) text = jsonMatch[0];
     var parsed;
     try {
       parsed = JSON.parse(text);
