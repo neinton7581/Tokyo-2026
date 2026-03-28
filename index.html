@@ -9014,10 +9014,11 @@ function confirmReceiptSave() {
   // 允許負數（折扣），只排除金額為 0 且品名空白的
   var saved = 0;
   _receiptItems.forEach(function(item) {
-    if (item.name && item.amount !== 0 && !isNaN(item.amount)) {
+    if (item.name) {
       var qty = item.qty || 1;
-      var unitPrice = item.unit_price !== undefined ? item.unit_price : item.amount;
+      var unitPrice = item.unit_price !== undefined ? item.unit_price : (item.amount || 0);
       var total = Math.round(qty * unitPrice);
+      if (total === 0 && !item.name.trim()) return; // 名稱空白且金額為零才跳過
       data.unshift({ name:item.name, store:store, amt:total, currency:'JPY', jpy:total, qty:qty, unitPrice:unitPrice, date:date, cat:cat, pay:pay, thumb:null, id:Date.now() + Math.random() });
       saved++;
     }
