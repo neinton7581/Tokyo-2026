@@ -2791,6 +2791,18 @@ body {
   font-size:0.84rem; color:#4a7a9b; font-weight:600; border:none; outline:none;
   background:transparent; width:4.5rem; text-align:right;
 }
+.receipt-row-qty {
+  font-size:0.8rem; color:#4a7a9b; border:none; outline:none;
+  background:transparent; width:2rem; text-align:center;
+}
+.receipt-row-unit {
+  font-size:0.8rem; color:#4a7a9b; font-weight:600; border:none; outline:none;
+  background:transparent; width:3.8rem; text-align:right;
+}
+.receipt-row-total {
+  font-size:0.72rem; color:rgba(101,152,181,0.55); white-space:nowrap;
+}
+.ledger-item-qty { font-size:0.65rem; color:rgba(101,152,181,0.6); margin-top:0.1rem; }
 .receipt-row-del {
   background:none; border:none; cursor:pointer; color:rgba(200,80,80,0.45); font-size:0.82rem; padding:0.2rem;
 }
@@ -7401,7 +7413,9 @@ body {
         </div>
         <div class="wallet-field-row">
           <button class="currency-toggle-btn twd" id="currencyToggle" onclick="toggleLedgerCurrency()">NT$ TWD</button>
-          <input class="wallet-input" id="ledgerAmt" placeholder="台幣金額 NT$" type="number" inputmode="decimal" style="flex:1;">
+          <input class="wallet-input" id="ledgerAmt" placeholder="單價" type="number" inputmode="decimal" style="flex:1;">
+          <span style="color:rgba(101,152,181,0.6);font-size:0.8rem;white-space:nowrap;">×</span>
+          <input class="wallet-input" id="ledgerQty" placeholder="數量" type="number" inputmode="numeric" min="1" value="1" style="width:3.5rem;flex:none;">
           <img id="thumbPreview" class="wallet-thumb-preview" alt="預覽" onclick="openLightbox(this.src)">
         </div>
         <div class="wallet-field-row">
@@ -8087,6 +8101,7 @@ function renderLedger() {
           + '<div style="flex:1;min-width:0;">'
             // 細項名稱 — 只有點到文字才觸發編輯
             + '<div class="ledger-name ledger-editable" onclick="editItemName(' + item.id + ',event)">' + escHtml(item.name) + '</div>'
+            + (item.qty && item.qty > 1 ? '<div class="ledger-item-qty">×' + item.qty + ' @ ' + (isTwd ? 'NT$' : '¥') + (item.unitPrice || 0).toLocaleString() + '</div>' : '')
             + '<div style="display:flex;gap:0.3rem;flex-wrap:wrap;">'
             + (item.cat ? '<div class="ledger-cat">' + escHtml(item.cat) + '</div>' : '')
             + (item.pay ? '<div class="ledger-cat" style="background:rgba(224,123,57,0.1);color:#c96928;">' + escHtml(item.pay) + '</div>' : '')
@@ -8779,18 +8794,21 @@ var _origSaveLedger = null;
 document.addEventListener('DOMContentLoaded', function() {
   _origSaveLedger = window.saveLedger;
   window.saveLedger = function() {
-    var name  = document.getElementById('ledgerName').value.trim();
-    var store = (document.getElementById('ledgerStore') ? document.getElementById('ledgerStore').value.trim() : '') || '';
-    var amt   = parseFloat(document.getElementById('ledgerAmt').value);
-    var date  = document.getElementById('ledgerDate').value;
-    var cat   = document.getElementById('ledgerCat').value;
-    var pay   = document.getElementById('ledgerPayMethod') ? document.getElementById('ledgerPayMethod').value : '現金';
-    if (!name || isNaN(amt) || amt === 0) { alert('請填寫品項與金額'); return; }
+    var name      = document.getElementById('ledgerName').value.trim();
+    var store     = (document.getElementById('ledgerStore') ? document.getElementById('ledgerStore').value.trim() : '') || '';
+    var unitPrice = parseFloat(document.getElementById('ledgerAmt').value);
+    var qty       = parseInt(document.getElementById('ledgerQty') ? document.getElementById('ledgerQty').value : '1') || 1;
+    var amt       = Math.round(unitPrice * qty);
+    var date      = document.getElementById('ledgerDate').value;
+    var cat       = document.getElementById('ledgerCat').value;
+    var pay       = document.getElementById('ledgerPayMethod') ? document.getElementById('ledgerPayMethod').value : '現金';
+    if (!name || isNaN(unitPrice) || unitPrice === 0) { alert('請填寫品項與金額'); return; }
     var data = getLedger();
-    data.unshift({ name:name, store:store, amt:Math.round(amt), currency:_ledgerCurrency, jpy:_ledgerCurrency==='JPY'?Math.round(amt):null, date:date, cat:cat, pay:pay, thumb:window._pendingThumb||null, id:Date.now() });
+    data.unshift({ name:name, store:store, amt:amt, currency:_ledgerCurrency, jpy:_ledgerCurrency==='JPY'?amt:null, qty:qty, unitPrice:unitPrice, date:date, cat:cat, pay:pay, thumb:window._pendingThumb||null, id:Date.now() });
     saveLedgerData(data);
     document.getElementById('ledgerName').value = '';
     document.getElementById('ledgerAmt').value = '';
+    if (document.getElementById('ledgerQty')) document.getElementById('ledgerQty').value = '1';
     if (document.getElementById('ledgerStore')) document.getElementById('ledgerStore').value = '';
     document.getElementById('thumbPreview').style.display = 'none';
     document.getElementById('photoInput').value = '';
@@ -8849,7 +8867,7 @@ function handleReceiptScan(event) {
 }
 
 function callGeminiOCR(apiKey, base64, mime, blobUrl) {
-  var prompt = '這是一張日本商店的收據照片。請仔細辨識以下資訊，並以純JSON格式回傳（絕對不可包含任何markdown、程式碼區塊符號或說明文字，只回傳JSON物件本身）：\n{"store":"店名（若看不到則填unknown）","date":"收據上的日期（格式為M/D，例如3月27日請填3/27；若看不到則填null）","total":收據合計金額數字（不含符號，若看不到則填null）,"items":[{"name":"品項名稱（翻譯成繁體中文，保持簡短）","amount":金額數字}]}\n每個品項的amount必須是數字，不含任何文字或符號。';
+  var prompt = '這是一張日本商店的收據照片。請仔細辨識以下資訊，並以純JSON格式回傳（絕對不可包含任何markdown、程式碼區塊符號或說明文字，只回傳JSON物件本身）：\n{"store":"店名（若看不到則填unknown）","date":"收據上的日期（格式為M/D，例如3月27日請填3/27；若看不到則填null）","total":收據合計金額數字（不含符號，若看不到則填null）,"items":[{"name":"品項名稱（翻譯成繁體中文，保持簡短）","qty":購買數量整數（預設為1）,"unit_price":單件單價數字,"amount":該品項合計金額數字（unit_price × qty）}]}\n每個數字欄位必須是純數字，不含任何文字或符號。若同一品項有多件，請確實填入qty與unit_price。';
 
   fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + apiKey, {
     method: 'POST',
@@ -8944,14 +8962,30 @@ function renderReceiptConfirm(storeName, dataUrl) {
 function renderReceiptItemRows() {
   if (!_receiptItems.length) return '<div style="padding:1rem;text-align:center;color:rgba(101,152,181,0.4);font-size:0.8rem;">無品項</div>';
   return _receiptItems.map(function(item, i) {
-    return '<div class="receipt-row">' +
+    var qty = item.qty || 1;
+    var unitPrice = item.unit_price !== undefined ? item.unit_price : item.amount;
+    var total = Math.round(qty * unitPrice);
+    return '<div class="receipt-row" style="flex-wrap:wrap;">' +
       '<div class="receipt-row-num">' + (i+1) + '</div>' +
       '<input class="receipt-row-name" value="' + escHtml(item.name) + '" oninput="_receiptItems[' + i + '].name=this.value">' +
-      '<span style="color:rgba(101,152,181,0.5);font-size:0.8rem;">¥</span>' +
-      '<input class="receipt-row-amt" value="' + item.amount + '" type="number" oninput="_receiptItems[' + i + '].amount=parseFloat(this.value)||0;updateReceiptSaveBtn()">' +
       '<button class="receipt-row-del" onclick="delReceiptItem(' + i + ')"><i class="fa-solid fa-trash-can"></i></button>' +
+      '<div style="width:100%;display:flex;align-items:center;gap:0.3rem;padding-left:1.85rem;margin-top:0.2rem;">' +
+        '<span style="font-size:0.75rem;color:rgba(101,152,181,0.6);">×</span>' +
+        '<input class="receipt-row-qty" value="' + qty + '" type="number" min="1" oninput="updateReceiptRowAmt(' + i + ',null,this.value)">' +
+        '<span style="font-size:0.75rem;color:rgba(101,152,181,0.6);">@ ¥</span>' +
+        '<input class="receipt-row-unit" value="' + unitPrice + '" type="number" oninput="updateReceiptRowAmt(' + i + ',this.value,null)">' +
+        '<span class="receipt-row-total">＝ ¥' + total.toLocaleString() + '</span>' +
+      '</div>' +
     '</div>';
   }).join('');
+}
+
+function updateReceiptRowAmt(i, unitPrice, qty) {
+  if (unitPrice !== null) _receiptItems[i].unit_price = parseFloat(unitPrice) || 0;
+  if (qty !== null) _receiptItems[i].qty = parseInt(qty) || 1;
+  _receiptItems[i].amount = Math.round((_receiptItems[i].qty || 1) * (_receiptItems[i].unit_price || 0));
+  document.getElementById('receiptItemList').innerHTML = renderReceiptItemRows();
+  updateReceiptSaveBtn();
 }
 
 function updateReceiptSaveBtn() {
@@ -8966,7 +9000,7 @@ function delReceiptItem(i) {
 }
 
 function addReceiptItem() {
-  _receiptItems.push({ name: '新品項', amount: 0 });
+  _receiptItems.push({ name: '新品項', qty: 1, unit_price: 0, amount: 0 });
   document.getElementById('receiptItemList').innerHTML = renderReceiptItemRows();
   updateReceiptSaveBtn();
 }
@@ -8981,7 +9015,10 @@ function confirmReceiptSave() {
   var saved = 0;
   _receiptItems.forEach(function(item) {
     if (item.name && item.amount !== 0 && !isNaN(item.amount)) {
-      data.unshift({ name:item.name, store:store, jpy:Math.round(item.amount), date:date, cat:cat, pay:pay, thumb:null, id:Date.now() + Math.random() });
+      var qty = item.qty || 1;
+      var unitPrice = item.unit_price !== undefined ? item.unit_price : item.amount;
+      var total = Math.round(qty * unitPrice);
+      data.unshift({ name:item.name, store:store, amt:total, currency:'JPY', jpy:total, qty:qty, unitPrice:unitPrice, date:date, cat:cat, pay:pay, thumb:null, id:Date.now() + Math.random() });
       saved++;
     }
   });
