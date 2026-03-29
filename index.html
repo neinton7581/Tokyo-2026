@@ -8894,7 +8894,29 @@ function handleReceiptScan(event) {
 }
 
 function callGeminiOCR(apiKey, base64, mime, blobUrl) {
-  var prompt = '這是一張日本商店的收據照片。請仔細辨識以下資訊，並以純JSON格式回傳（絕對不可包含任何markdown、程式碼區塊符號或說明文字，只回傳JSON物件本身）：\n{"store":"店名（若看不到則填unknown）","date":"收據上的日期（格式為M/D，例如3月27日請填3/27；若看不到則填null）","total":收據最終支付的含稅總金額數字（即顧客實際付款金額，不含符號，若看不到則填null）,"is_tax_free":布林值（收據出現「免稅」「Tax-Free」或消費稅為0則為true，否則false）,"tax_rate_type":"稅制類型，只能填：免稅、10%標準稅率、8%減輕稅率、混合稅率、不明，其中之一","tax_amount":收據中的稅金金額數字（免稅則填0，不明則填null）,"tax_free_fee":免稅手續費金額數字（無則填0）,"items":[{"name":"品項名稱（翻譯成繁體中文，保持簡短）","qty":購買數量整數（預設為1）,"unit_price":每件商品的【含稅】單價數字（若收據列的是未稅單價，請自行加上稅金換算為含稅單價後填入；免稅商品則直接填未稅單價）,"amount":該品項含稅合計金額（unit_price × qty）}]}\n判斷準則：若看到「免税対象商品」「Tax-Free」或消費稅額為0，is_tax_free填true；若有「内消費税」「消費税」且金額大於0，填false。每個數字欄位必須是純數字，不含任何文字或符號。';
+  var prompt = [
+    '這是一張日本商店的收據照片。請仔細辨識並以純JSON格式回傳（絕對不可包含任何markdown、程式碼區塊符號或說明文字，只回傳JSON物件本身）：',
+    '{"store":"店名（若看不到則填unknown）","date":"日期（格式M/D，例如3月27日填3/27；若看不到填null）","total":顧客最終實際支付金額的數字（看收據最下方クレジット支払／現金支払／合計欄位；不含符號；若看不到填null）,"is_tax_free":布林值,"tax_rate_type":"只能填：免稅、10%標準稅率、8%減輕稅率、混合稅率、不明 其中之一","tax_amount":消費稅金額數字（免稅填0；不明填null）,"tax_free_fee":TaxFreeFee免稅手續費金額數字（無則填0）,"items":[{"name":"品項名稱（翻譯繁體中文，保持簡短）","qty":數量整數（預設1）,"unit_price":每件單價數字,"amount":合計金額數字（unit_price×qty）}]}',
+    '',
+    '【絕對禁止列入items的行】以下行絕對不是商品，不得出現在items陣列中：',
+    '・TaxFreeFee（免稅手續費行）',
+    '・免税消費税（退稅調整，通常是負數）',
+    '・消費税／内消費税／消費税等（稅金行）',
+    '・小計／合計／支払い（匯總行）',
+    '・任何金額為負數的行',
+    'items只列有「品名＋金額」的實際購買商品。',
+    '',
+    '【is_tax_free判斷】',
+    '・收據頂部有「TAX-FREE FINISHED」印章，或收據上出現「免税」「Tax-Free」字樣 → true',
+    '・有「内消費税」「消費税」且金額大於0且無退稅 → false',
+    '',
+    '【unit_price填法】',
+    '・免稅收據(is_tax_free=true)：直接填收據上列印的金額（顧客實際支付的未稅單價，不需換算）',
+    '・含稅收據(is_tax_free=false)：填含稅單價（若收據只列稅抜價格，請乘以對應稅率換算為含稅價）',
+    '・※記號商品表示8%軽減税率食品，照正常商品處理，列入items',
+    '',
+    '每個數字欄位必須是純數字，不含任何¥符號或文字。'
+  ].join('\n');
 
   fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + apiKey, {
     method: 'POST',
@@ -8940,7 +8962,14 @@ function callGeminiOCR(apiKey, base64, mime, blobUrl) {
         throw new Error('JSON 解析失敗，AI 回傳內容：' + text.slice(0, 200));
       }
     }
-    _receiptItems = parsed.items || [];
+    // ── 過濾非商品行：移除 AI 誤判為品項的手續費／稅金調整行 ──
+    var _nonItemPattern = /taxfree\s*fee|免税消費税|消費税|内消費税|小計|合計|支払/i;
+    _receiptItems = (parsed.items || []).filter(function(it) {
+      if (!it.name) return false;
+      if (_nonItemPattern.test(it.name)) return false;
+      if ((it.unit_price || it.amount || 0) < 0) return false; // 負數行排除
+      return true;
+    });
     // ── 含稅比例修正：若品項加總與 total 有差距，按比例調整各品項金額 ──
     if (!parsed.is_tax_free && parsed.total && _receiptItems.length) {
       var itemsSum = _receiptItems.reduce(function(s, it) {
