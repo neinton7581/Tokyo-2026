@@ -2725,6 +2725,19 @@ body {
   display:flex; align-items:center; justify-content:center; gap:0.4rem; font-weight:600;
 }
 .wallet-scan-btn:active { background:rgba(224,123,57,0.22); }
+.ledger-tax-btn {
+  padding:0.45rem 0.8rem; border-radius:8px; font-size:0.75rem; font-weight:700;
+  cursor:pointer; border:1px solid rgba(0,0,0,0.15); background:rgba(0,0,0,0.05);
+  color:#888; white-space:nowrap;
+}
+.ledger-tax-btn.tax-inc {
+  background:linear-gradient(135deg,rgba(59,130,246,0.12),rgba(59,130,246,0.07));
+  border:1px solid rgba(59,130,246,0.45); color:#1d4ed8;
+}
+.ledger-tax-btn.tax-free {
+  background:linear-gradient(135deg,rgba(34,197,94,0.12),rgba(34,197,94,0.07));
+  border:1px solid rgba(34,197,94,0.45); color:#15803d;
+}
 .scan-source-wrap { flex:1; position:relative; display:flex; }
 .scan-source-popup {
   display:none; position:absolute; bottom:calc(100% + 6px); left:0; right:0;
@@ -7401,6 +7414,7 @@ body {
             <option value="PayPay">📱 PayPay</option>
             <option value="其他">💫 其他</option>
           </select>
+          <button class="ledger-tax-btn" id="ledgerTaxBtn" onclick="toggleLedgerTax()">稅制</button>
         </div>
         <div class="wallet-field-row">
           <button class="wallet-photo-btn" onclick="document.getElementById('photoInput').click()">
@@ -7943,6 +7957,24 @@ function getLedger() {
 function saveLedgerData(d) { localStorage.setItem('tokyo_ledger', JSON.stringify(d)); }
 
 var _ledgerCurrency = 'TWD';
+var _ledgerTaxStatus = null; // null=未設定, false=含稅, true=免稅
+
+function toggleLedgerTax() {
+  var btn = document.getElementById('ledgerTaxBtn');
+  if (_ledgerTaxStatus === null) {
+    _ledgerTaxStatus = false;
+    btn.textContent = '含稅';
+    btn.className = 'ledger-tax-btn tax-inc';
+  } else if (_ledgerTaxStatus === false) {
+    _ledgerTaxStatus = true;
+    btn.textContent = '免稅';
+    btn.className = 'ledger-tax-btn tax-free';
+  } else {
+    _ledgerTaxStatus = null;
+    btn.textContent = '稅制';
+    btn.className = 'ledger-tax-btn';
+  }
+}
 
 function toggleLedgerCurrency() {
   _ledgerCurrency = _ledgerCurrency === 'JPY' ? 'TWD' : 'JPY';
@@ -8793,7 +8825,9 @@ document.addEventListener('DOMContentLoaded', function() {
     var pay       = document.getElementById('ledgerPayMethod') ? document.getElementById('ledgerPayMethod').value : '現金';
     if (!name || isNaN(unitPrice) || unitPrice === 0) { alert('請填寫品項與金額'); return; }
     var data = getLedger();
-    data.unshift({ name:name, store:store, amt:amt, currency:_ledgerCurrency, jpy:_ledgerCurrency==='JPY'?amt:null, qty:qty, unitPrice:unitPrice, date:date, cat:cat, pay:pay, thumb:window._pendingThumb||null, id:Date.now() });
+    var entry = { name:name, store:store, amt:amt, currency:_ledgerCurrency, jpy:_ledgerCurrency==='JPY'?amt:null, qty:qty, unitPrice:unitPrice, date:date, cat:cat, pay:pay, thumb:window._pendingThumb||null, id:Date.now() };
+    if (_ledgerTaxStatus !== null) entry.isTaxFree = _ledgerTaxStatus;
+    data.unshift(entry);
     saveLedgerData(data);
     document.getElementById('ledgerName').value = '';
     document.getElementById('ledgerAmt').value = '';
@@ -8802,6 +8836,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('thumbPreview').style.display = 'none';
     document.getElementById('photoInput').value = '';
     window._pendingThumb = null;
+    _ledgerTaxStatus = null;
+    var taxBtn = document.getElementById('ledgerTaxBtn');
+    if (taxBtn) { taxBtn.textContent = '稅制'; taxBtn.className = 'ledger-tax-btn'; }
     renderLedger();
   };
 });
