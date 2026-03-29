@@ -8154,13 +8154,15 @@ function renderLedger() {
       var dEnc = encodeURIComponent(date);
       var sEnc = encodeURIComponent(store);
 
-      // ── 稅制判斷：決定 badge 顯示在店名後還是各品項後 ──
-      var taxItems = storeItems.filter(function(it) { return it.isTaxFree !== undefined; });
-      var allTaxFree = taxItems.length > 0 && taxItems.every(function(it) { return it.isTaxFree === true; });
-      var allTaxInc  = taxItems.length > 0 && taxItems.every(function(it) { return it.isTaxFree === false; });
+      // ── 稅制判斷：決定 badge 顯示在店名後及各品項後 ──
+      var allTaxFree = storeItems.every(function(it) { return it.isTaxFree === true; });
+      var allTaxInc  = storeItems.every(function(it) { return it.isTaxFree === false; });
+      var allNoTax   = storeItems.every(function(it) { return it.isTaxFree === undefined; });
+      var hasMix = !allTaxFree && !allTaxInc && !allNoTax;
       var storeTaxBadge = '';
       if (allTaxFree) storeTaxBadge = '<span style="font-size:0.58rem;font-weight:600;padding:0.1rem 0.4rem;border-radius:3px;background:rgba(42,122,74,0.12);color:#2a7a4a;margin-left:0.35rem;">免稅</span>';
       else if (allTaxInc) storeTaxBadge = '<span style="font-size:0.58rem;font-weight:600;padding:0.1rem 0.4rem;border-radius:3px;background:rgba(101,152,181,0.12);color:#4a7a9b;margin-left:0.35rem;">含稅</span>';
+      else if (hasMix) storeTaxBadge = '<span style="font-size:0.58rem;font-weight:600;padding:0.1rem 0.4rem;border-radius:3px;background:rgba(224,123,57,0.12);color:#c96928;margin-left:0.35rem;">Mix</span>';
 
       html += '<div class="ledger-store-group collapsed" id="' + sgid + '">';
       html += '<div class="ledger-store-header" onclick="toggleLedgerGroup(\'' + sgid + '\')">'
@@ -8192,7 +8194,7 @@ function renderLedger() {
           + '<div style="flex:1;min-width:0;">'
             // 細項名稱 — 只有點到文字才觸發編輯
             + '<div class="ledger-name ledger-editable" onclick="editItemName(' + item.id + ',event)">' + escHtml(item.name)
-            + (!allTaxFree && !allTaxInc && item.isTaxFree !== undefined
+            + (item.isTaxFree !== undefined
                 ? (item.isTaxFree
                     ? '<span style="font-size:0.58rem;font-weight:600;padding:0.1rem 0.4rem;border-radius:3px;background:rgba(42,122,74,0.12);color:#2a7a4a;margin-left:0.35rem;">免稅</span>'
                     : '<span style="font-size:0.58rem;font-weight:600;padding:0.1rem 0.4rem;border-radius:3px;background:rgba(101,152,181,0.12);color:#4a7a9b;margin-left:0.35rem;">含稅</span>')
@@ -8337,8 +8339,12 @@ function openLedgerItemEdit(id, event) {
   _editTaxStatus = item.isTaxFree !== undefined ? item.isTaxFree : null;
 
   document.getElementById('ledgerEditTitle').textContent = item.name || '編輯項目';
-  document.getElementById('editUnitPrice').value = item.unitPrice || item.amt || 0;
-  document.getElementById('editQty').value = item.qty || 1;
+  var qty0 = item.qty || 1;
+  var up0 = (item.unitPrice != null && !isNaN(item.unitPrice) && item.unitPrice > 0)
+    ? item.unitPrice
+    : Math.round((item.amt || item.jpy || 0) / qty0);
+  document.getElementById('editUnitPrice').value = up0;
+  document.getElementById('editQty').value = qty0;
 
   var btn = document.getElementById('editTaxBtn');
   if (_editTaxStatus === null)       { btn.textContent = '稅制'; btn.className = 'ledger-tax-btn'; }
