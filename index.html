@@ -7470,18 +7470,11 @@ body {
           <button class="wallet-photo-btn" onclick="document.getElementById('photoInput').click()">
             <i class="fa-solid fa-camera"></i> 附圖
           </button>
-          <div class="scan-source-wrap">
-            <button class="wallet-scan-btn" onclick="toggleScanSourcePopup(event)">
-              <i class="fa-solid fa-receipt"></i> 掃描收據
-            </button>
-            <div class="scan-source-popup" id="scanSourcePopup">
-              <button class="scan-source-opt" onclick="triggerScanSource('camera')"><i class="fa-solid fa-camera"></i> 直接拍照</button>
-              <button class="scan-source-opt" onclick="triggerScanSource('album')"><i class="fa-solid fa-images"></i> 從相簿選取</button>
-            </div>
-          </div>
+          <button class="wallet-scan-btn" onclick="document.getElementById('scanInput').click()">
+            <i class="fa-solid fa-receipt"></i> 掃描收據
+          </button>
           <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(event)">
-          <input type="file" id="scanInputCamera" accept="image/*" capture="environment" style="display:none" onchange="handleReceiptScan(event)">
-          <input type="file" id="scanInputAlbum" accept="image/*" style="display:none" onchange="handleReceiptScan(event)">
+          <input type="file" id="scanInput" accept="image/*" style="display:none" onchange="handleReceiptScan(event)">
         </div>
         <button class="wallet-save-btn" onclick="saveLedger()"><i class="fa-solid fa-floppy-disk"></i> 儲存記帳</button>
       </div>
@@ -9012,19 +9005,6 @@ var _receiptItems = [];
 var _receiptStoreName = '';
 var _receiptTaxInfo = null;
 
-function toggleScanSourcePopup(e) {
-  e.stopPropagation();
-  var popup = document.getElementById('scanSourcePopup');
-  popup.classList.toggle('open');
-}
-function triggerScanSource(src) {
-  document.getElementById('scanSourcePopup').classList.remove('open');
-  document.getElementById(src === 'camera' ? 'scanInputCamera' : 'scanInputAlbum').click();
-}
-document.addEventListener('click', function() {
-  var popup = document.getElementById('scanSourcePopup');
-  if (popup) popup.classList.remove('open');
-});
 
 function handleReceiptScan(event) {
   var file = event.target.files[0];
@@ -9322,8 +9302,16 @@ function renderStats() {
   var payEntries = Object.keys(payMap).map(function(k){ return {name:k, amt:payMap[k]}; })
     .sort(function(a,b){ return b.amt-a.amt; });
 
-  // Top 10（以 TWD 排序）
-  var top10 = data.slice().sort(function(a,b){ return itemToTwd(b,rate)-itemToTwd(a,rate); }).slice(0,10);
+  // Top 10 店家（依 TWD 加總排序）
+  var storeMap = {};
+  data.forEach(function(item) {
+    var s = (item.store && item.store.trim()) ? item.store.trim() : '其他';
+    storeMap[s] = (storeMap[s] || 0) + itemToTwd(item, rate);
+  });
+  var top10 = Object.keys(storeMap)
+    .map(function(s) { return { name: s, amt: Math.round(storeMap[s]) }; })
+    .sort(function(a, b) { return b.amt - a.amt; })
+    .slice(0, 10);
 
   var html = '';
 
@@ -9348,13 +9336,13 @@ function renderStats() {
     '<div class="stats-legend" id="payLegend"></div>' +
     '</div></div>';
 
-  // 花費前十名
-  html += '<div class="stats-card"><div class="stats-card-title">花費金額前十名</div>';
-  top10.forEach(function(item, i) {
+  // 花費前十名（店家）
+  html += '<div class="stats-card"><div class="stats-card-title">消費店家前十名</div>';
+  top10.forEach(function(store, i) {
     html += '<div class="stats-top-row">' +
       '<span class="stats-top-rank">' + (i+1) + '</span>' +
-      '<span class="stats-top-name">' + escHtml(item.name) + '</span>' +
-      '<span class="stats-top-amt">NT$' + itemToTwd(item, rate).toLocaleString() + '</span>' +
+      '<span class="stats-top-name">' + escHtml(store.name) + '</span>' +
+      '<span class="stats-top-amt">NT$' + store.amt.toLocaleString() + '</span>' +
       '</div>';
   });
   html += '</div>';
