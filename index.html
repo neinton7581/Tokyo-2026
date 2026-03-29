@@ -9055,8 +9055,7 @@ function callGeminiOCR(apiKey, base64, mime, blobUrl) {
     '・有「内消費税」「消費税」且金額大於0且無退稅 → false',
     '',
     '【unit_price填法】',
-    '・免稅收據(is_tax_free=true)：直接填收據上列印的金額（顧客實際支付的未稅單價，不需換算）',
-    '・含稅收據(is_tax_free=false)：填含稅單價（若收據只列稅抜價格，請乘以對應稅率換算為含稅價）',
+    '・unit_price一律直接填收據上各品項列印的金額，不需自行換算（系統會自動依total修正比例）',
     '・※記號商品表示8%軽減税率食品，照正常商品處理，列入items',
     '',
     '每個數字欄位必須是純數字，不含任何¥符號或文字。'
@@ -9114,13 +9113,19 @@ function callGeminiOCR(apiKey, base64, mime, blobUrl) {
       if ((it.unit_price || it.amount || 0) < 0) return false; // 負數行排除
       return true;
     });
-    // ── 含稅比例修正：若品項加總與 total 有差距，按比例調整各品項金額 ──
-    if (!parsed.is_tax_free && parsed.total && _receiptItems.length) {
+    // ── 比例修正：若品項加總與 total 有差距，按比例調整各品項金額 ──
+    // 免稅收據分兩種：
+    //   ① 品項列含稅標價（UNIQLO型）→ itemsSum > total → 需縮小
+    //   ② 品項列未稅價（Loft型，total含手續費）→ itemsSum < total → 不縮放
+    // 含稅收據：AI可能回傳未稅單價 → itemsSum < total → 需放大
+    if (parsed.total && _receiptItems.length) {
       var itemsSum = _receiptItems.reduce(function(s, it) {
         return s + Math.round((it.qty || 1) * (it.unit_price || it.amount || 0));
       }, 0);
       // 差距超過 1% 才修正（避免因四捨五入造成的微小誤差觸發）
-      if (itemsSum > 0 && Math.abs(itemsSum - parsed.total) / parsed.total > 0.01) {
+      var needScale = itemsSum > 0 && Math.abs(itemsSum - parsed.total) / parsed.total > 0.01
+        && (!parsed.is_tax_free || itemsSum > parsed.total); // 免稅僅在品項總和 > total 時才縮小
+      if (needScale) {
         var scale = parsed.total / itemsSum;
         _receiptItems.forEach(function(it) {
           var origAmt = Math.round((it.qty || 1) * (it.unit_price || it.amount || 0));
