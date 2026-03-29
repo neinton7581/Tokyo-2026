@@ -8046,12 +8046,20 @@ function renderLedger() {
       var dEnc = encodeURIComponent(date);
       var sEnc = encodeURIComponent(store);
 
+      // ── 稅制判斷：決定 badge 顯示在店名後還是各品項後 ──
+      var taxItems = storeItems.filter(function(it) { return it.isTaxFree !== undefined; });
+      var allTaxFree = taxItems.length > 0 && taxItems.every(function(it) { return it.isTaxFree === true; });
+      var allTaxInc  = taxItems.length > 0 && taxItems.every(function(it) { return it.isTaxFree === false; });
+      var storeTaxBadge = '';
+      if (allTaxFree) storeTaxBadge = '<span style="font-size:0.58rem;font-weight:600;padding:0.1rem 0.4rem;border-radius:3px;background:rgba(42,122,74,0.12);color:#2a7a4a;margin-left:0.35rem;">免稅</span>';
+      else if (allTaxInc) storeTaxBadge = '<span style="font-size:0.58rem;font-weight:600;padding:0.1rem 0.4rem;border-radius:3px;background:rgba(101,152,181,0.12);color:#4a7a9b;margin-left:0.35rem;">含稅</span>';
+
       html += '<div class="ledger-store-group collapsed" id="' + sgid + '">';
       html += '<div class="ledger-store-header" onclick="toggleLedgerGroup(\'' + sgid + '\')">'
         // 店名 — 只有點到文字才觸發編輯，stopPropagation 避免同時 toggle
         + '<span class="ledger-store-name ledger-editable" onclick="editStoreName(\'' + dEnc + '\',\'' + sEnc + '\',event)">'
         + '<i class="fa-solid fa-store" style="font-size:0.65rem;opacity:0.6;flex-shrink:0;"></i>'
-        + escHtml(store) + '</span>'
+        + escHtml(store) + storeTaxBadge + '</span>'
         + '<span class="ledger-store-subtotal">'
         + 'NT$' + storeTwd.toLocaleString()
         // 整店刪除按鈕
@@ -8075,7 +8083,13 @@ function renderLedger() {
         html += '<div class="ledger-item">'
           + '<div style="flex:1;min-width:0;">'
             // 細項名稱 — 只有點到文字才觸發編輯
-            + '<div class="ledger-name ledger-editable" onclick="editItemName(' + item.id + ',event)">' + escHtml(item.name) + '</div>'
+            + '<div class="ledger-name ledger-editable" onclick="editItemName(' + item.id + ',event)">' + escHtml(item.name)
+            + (!allTaxFree && !allTaxInc && item.isTaxFree !== undefined
+                ? (item.isTaxFree
+                    ? '<span style="font-size:0.58rem;font-weight:600;padding:0.1rem 0.4rem;border-radius:3px;background:rgba(42,122,74,0.12);color:#2a7a4a;margin-left:0.35rem;">免稅</span>'
+                    : '<span style="font-size:0.58rem;font-weight:600;padding:0.1rem 0.4rem;border-radius:3px;background:rgba(101,152,181,0.12);color:#4a7a9b;margin-left:0.35rem;">含稅</span>')
+                : '')
+            + '</div>'
             + (item.qty && item.qty > 1 ? '<div class="ledger-item-qty">×' + item.qty + ' @ ' + (isTwd ? 'NT$' : '¥') + (item.unitPrice || 0).toLocaleString() + '</div>' : '')
             + '<div style="display:flex;gap:0.3rem;flex-wrap:wrap;">'
             + (item.cat ? '<div class="ledger-cat">' + escHtml(item.cat) + '</div>' : '')
@@ -9029,7 +9043,7 @@ function confirmReceiptSave() {
       var unitPrice = item.unit_price !== undefined ? item.unit_price : (item.amount || 0);
       var total = Math.round(qty * unitPrice);
       if (total === 0 && !item.name.trim()) return; // 名稱空白且金額為零才跳過
-      data.unshift({ name:item.name, store:store, amt:total, currency:'JPY', jpy:total, qty:qty, unitPrice:unitPrice, date:date, cat:cat, pay:pay, thumb:null, id:Date.now() + Math.random() });
+      data.unshift({ name:item.name, store:store, amt:total, currency:'JPY', jpy:total, qty:qty, unitPrice:unitPrice, isTaxFree:(_receiptTaxInfo ? _receiptTaxInfo.isTaxFree : undefined), date:date, cat:cat, pay:pay, thumb:null, id:Date.now() + Math.random() });
       saved++;
     }
   });
