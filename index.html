@@ -2492,6 +2492,56 @@
     color: rgba(101,152,181,0.55);
     letter-spacing: 0.03em;
   }
+  .ledger-amounts { cursor: pointer; }
+  .ledger-amounts:active { opacity: 0.65; }
+  /* ── 消費項目編輯面板 ── */
+  .ledger-edit-overlay {
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,0.35); z-index:300;
+  }
+  .ledger-edit-overlay.open { display:block; }
+  .ledger-edit-panel {
+    display:none; position:fixed; left:0; right:0; bottom:0; z-index:301;
+    background:#fff; border-radius:16px 16px 0 0;
+    padding:1.25rem 1.25rem 2.2rem;
+    box-shadow:0 -4px 24px rgba(0,0,0,0.15);
+  }
+  .ledger-edit-panel.open { display:block; }
+  .ledger-edit-title {
+    font-weight:700; font-size:0.88rem; color:#4a6374;
+    margin-bottom:1rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .ledger-edit-row {
+    display:flex; align-items:center; gap:0.8rem; margin-bottom:0.75rem;
+  }
+  .ledger-edit-row label {
+    font-size:0.78rem; color:#999; width:2.4rem; flex-shrink:0;
+  }
+  .ledger-edit-row input[type="number"] {
+    flex:1; padding:0.5rem 0.65rem; border:1px solid rgba(101,152,181,0.3);
+    border-radius:8px; font-size:0.9rem; box-sizing:border-box;
+  }
+  .ledger-edit-qty { display:flex; align-items:center; gap:0.4rem; flex:1; }
+  .ledger-edit-qty button {
+    width:2rem; height:2rem; border-radius:50%; flex-shrink:0;
+    border:1px solid rgba(101,152,181,0.35); background:rgba(101,152,181,0.08);
+    font-size:1.1rem; color:#6598b5; display:flex; align-items:center; justify-content:center;
+  }
+  .ledger-edit-qty input {
+    flex:1; text-align:center; padding:0.5rem 0.4rem;
+    border:1px solid rgba(101,152,181,0.3); border-radius:8px; font-size:0.9rem;
+  }
+  .ledger-edit-actions { display:flex; gap:0.6rem; margin-top:1.1rem; }
+  .ledger-edit-cancel {
+    flex:1; padding:0.65rem; border-radius:10px;
+    border:1px solid rgba(0,0,0,0.12); background:rgba(0,0,0,0.04);
+    font-size:0.85rem; color:#888;
+  }
+  .ledger-edit-save {
+    flex:2; padding:0.65rem; border-radius:10px; border:none;
+    background:linear-gradient(135deg,#6598b5,#4a7a9b);
+    color:#fff; font-size:0.85rem; font-weight:700;
+  }
   .ledger-thumb {
     width: 44px;
     height: 44px;
@@ -7587,6 +7637,32 @@ body {
 </div>
 
 <!-- photo lightbox -->
+<!-- 消費項目編輯面板 -->
+<div class="ledger-edit-overlay" id="ledgerEditOverlay" onclick="closeLedgerItemEdit()"></div>
+<div class="ledger-edit-panel" id="ledgerEditPanel">
+  <div class="ledger-edit-title" id="ledgerEditTitle">編輯項目</div>
+  <div class="ledger-edit-row">
+    <label>單價</label>
+    <input type="number" id="editUnitPrice" inputmode="decimal" min="0" onclick="event.stopPropagation()">
+  </div>
+  <div class="ledger-edit-row">
+    <label>數量</label>
+    <div class="ledger-edit-qty">
+      <button onclick="adjustEditQty(-1)">−</button>
+      <input type="number" id="editQty" inputmode="numeric" min="1" onclick="event.stopPropagation()">
+      <button onclick="adjustEditQty(1)">+</button>
+    </div>
+  </div>
+  <div class="ledger-edit-row">
+    <label>稅制</label>
+    <button class="ledger-tax-btn" id="editTaxBtn" onclick="toggleEditItemTax()">稅制</button>
+  </div>
+  <div class="ledger-edit-actions">
+    <button class="ledger-edit-cancel" onclick="closeLedgerItemEdit()">取消</button>
+    <button class="ledger-edit-save" onclick="saveLedgerItemEdit()">儲存</button>
+  </div>
+</div>
+
 <div class="photo-lightbox" id="photoLightbox" onclick="closeLightbox()">
   <button class="photo-lightbox-close" onclick="closeLightbox()"><i class="fa-solid fa-xmark"></i></button>
   <img id="lightboxImg" src="" alt="">
@@ -8128,7 +8204,7 @@ function renderLedger() {
             + (item.pay ? '<div class="ledger-cat" style="background:rgba(224,123,57,0.1);color:#c96928;">' + escHtml(item.pay) + '</div>' : '')
             + '</div>'
           + '</div>'
-          + '<div class="ledger-amounts"><div class="ledger-jpy">' + jpyStr + '</div><div class="ledger-twd">' + twdStr + '</div></div>';
+          + '<div class="ledger-amounts" onclick="openLedgerItemEdit(' + item.id + ',event)" title="點擊修改"><div class="ledger-jpy">' + jpyStr + '</div><div class="ledger-twd">' + twdStr + '</div></div>';
         if (item.thumb) {
           html += '<img class="ledger-thumb" src="' + item.thumb + '" alt="" onclick="openLightbox(\'' + item.thumb.replace(/'/g,"\\'") + '\')">';
         }
@@ -8233,6 +8309,74 @@ function editItemName(id, event) {
     if (e.key === 'Enter')  { e.preventDefault(); inp.blur(); }
     if (e.key === 'Escape') { inp.value = origName; inp.blur(); }
   });
+}
+
+// ── 消費項目編輯面板 ──
+var _editingItemId = null;
+var _editTaxStatus = null;
+
+function openLedgerItemEdit(id, event) {
+  event.stopPropagation();
+  var data = getLedger();
+  var item = null;
+  for (var i = 0; i < data.length; i++) { if (data[i].id === id) { item = data[i]; break; } }
+  if (!item) return;
+  _editingItemId = id;
+  _editTaxStatus = item.isTaxFree !== undefined ? item.isTaxFree : null;
+
+  document.getElementById('ledgerEditTitle').textContent = item.name || '編輯項目';
+  document.getElementById('editUnitPrice').value = item.unitPrice || item.amt || 0;
+  document.getElementById('editQty').value = item.qty || 1;
+
+  var btn = document.getElementById('editTaxBtn');
+  if (_editTaxStatus === null)       { btn.textContent = '稅制'; btn.className = 'ledger-tax-btn'; }
+  else if (_editTaxStatus === false)  { btn.textContent = '含稅'; btn.className = 'ledger-tax-btn tax-inc'; }
+  else                                { btn.textContent = '免稅'; btn.className = 'ledger-tax-btn tax-free'; }
+
+  document.getElementById('ledgerEditOverlay').classList.add('open');
+  document.getElementById('ledgerEditPanel').classList.add('open');
+}
+
+function closeLedgerItemEdit() {
+  document.getElementById('ledgerEditOverlay').classList.remove('open');
+  document.getElementById('ledgerEditPanel').classList.remove('open');
+  _editingItemId = null;
+}
+
+function toggleEditItemTax() {
+  var btn = document.getElementById('editTaxBtn');
+  if (_editTaxStatus === null)      { _editTaxStatus = false; btn.textContent = '含稅'; btn.className = 'ledger-tax-btn tax-inc'; }
+  else if (_editTaxStatus === false) { _editTaxStatus = true;  btn.textContent = '免稅'; btn.className = 'ledger-tax-btn tax-free'; }
+  else                               { _editTaxStatus = null;  btn.textContent = '稅制'; btn.className = 'ledger-tax-btn'; }
+}
+
+function adjustEditQty(delta) {
+  var inp = document.getElementById('editQty');
+  var v = (parseInt(inp.value) || 1) + delta;
+  inp.value = v < 1 ? 1 : v;
+}
+
+function saveLedgerItemEdit() {
+  if (!_editingItemId) return;
+  var unitPrice = parseFloat(document.getElementById('editUnitPrice').value);
+  var qty = parseInt(document.getElementById('editQty').value) || 1;
+  if (isNaN(unitPrice) || unitPrice <= 0) { alert('請輸入正確金額'); return; }
+
+  var data = getLedger();
+  for (var i = 0; i < data.length; i++) {
+    if (data[i].id === _editingItemId) {
+      data[i].unitPrice = unitPrice;
+      data[i].qty = qty;
+      data[i].amt = Math.round(unitPrice * qty);
+      if (data[i].currency === 'JPY') data[i].jpy = data[i].amt;
+      if (_editTaxStatus !== null) data[i].isTaxFree = _editTaxStatus;
+      else delete data[i].isTaxFree;
+      break;
+    }
+  }
+  saveLedgerData(data);
+  closeLedgerItemEdit();
+  renderLedger();
 }
 
 function setLedgerDateToToday() {
