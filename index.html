@@ -2497,11 +2497,11 @@
   /* ── 消費項目編輯面板 ── */
   .ledger-edit-overlay {
     display:none; position:fixed; inset:0;
-    background:rgba(0,0,0,0.35); z-index:300;
+    background:rgba(0,0,0,0.35); z-index:9100;
   }
   .ledger-edit-overlay.open { display:block; }
   .ledger-edit-panel {
-    display:none; position:fixed; left:0; right:0; bottom:0; z-index:301;
+    display:none; position:fixed; left:0; right:0; bottom:0; z-index:9200;
     background:#fff; border-radius:16px 16px 0 0;
     padding:1.25rem 1.25rem 2.2rem;
     box-shadow:0 -4px 24px rgba(0,0,0,0.15);
@@ -8217,7 +8217,19 @@ function renderLedger() {
 
     html += '</div></div>'; // /date-items /date-group
   });
+  // 記住目前展開中的群組（沒有 collapsed class 的）
+  var openGroups = {};
+  document.querySelectorAll('#ledgerList [id^="ldg-"]').forEach(function(el) {
+    if (!el.classList.contains('collapsed')) openGroups[el.id] = true;
+  });
+
   document.getElementById('ledgerList').innerHTML = html;
+
+  // 恢復展開狀態
+  Object.keys(openGroups).forEach(function(gid) {
+    var el = document.getElementById(gid);
+    if (el) el.classList.remove('collapsed');
+  });
 }
 
 function delLedger(id) {
