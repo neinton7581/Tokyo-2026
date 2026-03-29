@@ -9278,7 +9278,7 @@ function confirmReceiptSave() {
   // 免稅手續費單獨記一筆
   if (_receiptTaxInfo && _receiptTaxInfo.taxFreeFee > 0) {
     var fee = _receiptTaxInfo.taxFreeFee;
-    data.unshift({ name:'免稅手續費', store:store, amt:fee, currency:'JPY', jpy:fee, qty:1, unitPrice:fee, date:date, cat:cat, pay:pay, thumb:null, id:Date.now() + Math.random() });
+    data.unshift({ name:'免稅手續費', store:store, amt:fee, currency:'JPY', jpy:fee, qty:1, unitPrice:fee, isTaxFree:_receiptTaxInfo.isTaxFree, date:date, cat:cat, pay:pay, thumb:null, id:Date.now() + Math.random() });
     saved++;
   }
   saveLedgerData(data);
