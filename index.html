@@ -2492,6 +2492,56 @@
     color: rgba(101,152,181,0.55);
     letter-spacing: 0.03em;
   }
+  .ledger-amounts { cursor: pointer; }
+  .ledger-amounts:active { opacity: 0.65; }
+  /* ── 消費項目編輯面板 ── */
+  .ledger-edit-overlay {
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,0.35); z-index:300;
+  }
+  .ledger-edit-overlay.open { display:block; }
+  .ledger-edit-panel {
+    display:none; position:fixed; left:0; right:0; bottom:0; z-index:301;
+    background:#fff; border-radius:16px 16px 0 0;
+    padding:1.25rem 1.25rem 2.2rem;
+    box-shadow:0 -4px 24px rgba(0,0,0,0.15);
+  }
+  .ledger-edit-panel.open { display:block; }
+  .ledger-edit-title {
+    font-weight:700; font-size:0.88rem; color:#4a6374;
+    margin-bottom:1rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .ledger-edit-row {
+    display:flex; align-items:center; gap:0.8rem; margin-bottom:0.75rem;
+  }
+  .ledger-edit-row label {
+    font-size:0.78rem; color:#999; width:2.4rem; flex-shrink:0;
+  }
+  .ledger-edit-row input[type="number"] {
+    flex:1; padding:0.5rem 0.65rem; border:1px solid rgba(101,152,181,0.3);
+    border-radius:8px; font-size:0.9rem; box-sizing:border-box;
+  }
+  .ledger-edit-qty { display:flex; align-items:center; gap:0.4rem; flex:1; }
+  .ledger-edit-qty button {
+    width:2rem; height:2rem; border-radius:50%; flex-shrink:0;
+    border:1px solid rgba(101,152,181,0.35); background:rgba(101,152,181,0.08);
+    font-size:1.1rem; color:#6598b5; display:flex; align-items:center; justify-content:center;
+  }
+  .ledger-edit-qty input {
+    flex:1; text-align:center; padding:0.5rem 0.4rem;
+    border:1px solid rgba(101,152,181,0.3); border-radius:8px; font-size:0.9rem;
+  }
+  .ledger-edit-actions { display:flex; gap:0.6rem; margin-top:1.1rem; }
+  .ledger-edit-cancel {
+    flex:1; padding:0.65rem; border-radius:10px;
+    border:1px solid rgba(0,0,0,0.12); background:rgba(0,0,0,0.04);
+    font-size:0.85rem; color:#888;
+  }
+  .ledger-edit-save {
+    flex:2; padding:0.65rem; border-radius:10px; border:none;
+    background:linear-gradient(135deg,#6598b5,#4a7a9b);
+    color:#fff; font-size:0.85rem; font-weight:700;
+  }
   .ledger-thumb {
     width: 44px;
     height: 44px;
@@ -7587,6 +7637,32 @@ body {
 </div>
 
 <!-- photo lightbox -->
+<!-- 消費項目編輯面板 -->
+<div class="ledger-edit-overlay" id="ledgerEditOverlay" onclick="closeLedgerItemEdit()"></div>
+<div class="ledger-edit-panel" id="ledgerEditPanel">
+  <div class="ledger-edit-title" id="ledgerEditTitle">編輯項目</div>
+  <div class="ledger-edit-row">
+    <label>單價</label>
+    <input type="number" id="editUnitPrice" inputmode="decimal" min="0" onclick="event.stopPropagation()">
+  </div>
+  <div class="ledger-edit-row">
+    <label>數量</label>
+    <div class="ledger-edit-qty">
+      <button onclick="adjustEditQty(-1)">−</button>
+      <input type="number" id="editQty" inputmode="numeric" min="1" onclick="event.stopPropagation()">
+      <button onclick="adjustEditQty(1)">+</button>
+    </div>
+  </div>
+  <div class="ledger-edit-row">
+    <label>稅制</label>
+    <button class="ledger-tax-btn" id="editTaxBtn" onclick="toggleEditItemTax()">稅制</button>
+  </div>
+  <div class="ledger-edit-actions">
+    <button class="ledger-edit-cancel" onclick="closeLedgerItemEdit()">取消</button>
+    <button class="ledger-edit-save" onclick="saveLedgerItemEdit()">儲存</button>
+  </div>
+</div>
+
 <div class="photo-lightbox" id="photoLightbox" onclick="closeLightbox()">
   <button class="photo-lightbox-close" onclick="closeLightbox()"><i class="fa-solid fa-xmark"></i></button>
   <img id="lightboxImg" src="" alt="">
@@ -8128,7 +8204,7 @@ function renderLedger() {
             + (item.pay ? '<div class="ledger-cat" style="background:rgba(224,123,57,0.1);color:#c96928;">' + escHtml(item.pay) + '</div>' : '')
             + '</div>'
           + '</div>'
-          + '<div class="ledger-amounts"><div class="ledger-jpy">' + jpyStr + '</div><div class="ledger-twd">' + twdStr + '</div></div>';
+          + '<div class="ledger-amounts" onclick="openLedgerItemEdit(' + item.id + ',event)" title="點擊修改"><div class="ledger-jpy">' + jpyStr + '</div><div class="ledger-twd">' + twdStr + '</div></div>';
         if (item.thumb) {
           html += '<img class="ledger-thumb" src="' + item.thumb + '" alt="" onclick="openLightbox(\'' + item.thumb.replace(/'/g,"\\'") + '\')">';
         }
@@ -8233,6 +8309,74 @@ function editItemName(id, event) {
     if (e.key === 'Enter')  { e.preventDefault(); inp.blur(); }
     if (e.key === 'Escape') { inp.value = origName; inp.blur(); }
   });
+}
+
+// ── 消費項目編輯面板 ──
+var _editingItemId = null;
+var _editTaxStatus = null;
+
+function openLedgerItemEdit(id, event) {
+  event.stopPropagation();
+  var data = getLedger();
+  var item = null;
+  for (var i = 0; i < data.length; i++) { if (data[i].id === id) { item = data[i]; break; } }
+  if (!item) return;
+  _editingItemId = id;
+  _editTaxStatus = item.isTaxFree !== undefined ? item.isTaxFree : null;
+
+  document.getElementById('ledgerEditTitle').textContent = item.name || '編輯項目';
+  document.getElementById('editUnitPrice').value = item.unitPrice || item.amt || 0;
+  document.getElementById('editQty').value = item.qty || 1;
+
+  var btn = document.getElementById('editTaxBtn');
+  if (_editTaxStatus === null)       { btn.textContent = '稅制'; btn.className = 'ledger-tax-btn'; }
+  else if (_editTaxStatus === false)  { btn.textContent = '含稅'; btn.className = 'ledger-tax-btn tax-inc'; }
+  else                                { btn.textContent = '免稅'; btn.className = 'ledger-tax-btn tax-free'; }
+
+  document.getElementById('ledgerEditOverlay').classList.add('open');
+  document.getElementById('ledgerEditPanel').classList.add('open');
+}
+
+function closeLedgerItemEdit() {
+  document.getElementById('ledgerEditOverlay').classList.remove('open');
+  document.getElementById('ledgerEditPanel').classList.remove('open');
+  _editingItemId = null;
+}
+
+function toggleEditItemTax() {
+  var btn = document.getElementById('editTaxBtn');
+  if (_editTaxStatus === null)      { _editTaxStatus = false; btn.textContent = '含稅'; btn.className = 'ledger-tax-btn tax-inc'; }
+  else if (_editTaxStatus === false) { _editTaxStatus = true;  btn.textContent = '免稅'; btn.className = 'ledger-tax-btn tax-free'; }
+  else                               { _editTaxStatus = null;  btn.textContent = '稅制'; btn.className = 'ledger-tax-btn'; }
+}
+
+function adjustEditQty(delta) {
+  var inp = document.getElementById('editQty');
+  var v = (parseInt(inp.value) || 1) + delta;
+  inp.value = v < 1 ? 1 : v;
+}
+
+function saveLedgerItemEdit() {
+  if (!_editingItemId) return;
+  var unitPrice = parseFloat(document.getElementById('editUnitPrice').value);
+  var qty = parseInt(document.getElementById('editQty').value) || 1;
+  if (isNaN(unitPrice) || unitPrice <= 0) { alert('請輸入正確金額'); return; }
+
+  var data = getLedger();
+  for (var i = 0; i < data.length; i++) {
+    if (data[i].id === _editingItemId) {
+      data[i].unitPrice = unitPrice;
+      data[i].qty = qty;
+      data[i].amt = Math.round(unitPrice * qty);
+      if (data[i].currency === 'JPY') data[i].jpy = data[i].amt;
+      if (_editTaxStatus !== null) data[i].isTaxFree = _editTaxStatus;
+      else delete data[i].isTaxFree;
+      break;
+    }
+  }
+  saveLedgerData(data);
+  closeLedgerItemEdit();
+  renderLedger();
 }
 
 function setLedgerDateToToday() {
@@ -8894,7 +9038,29 @@ function handleReceiptScan(event) {
 }
 
 function callGeminiOCR(apiKey, base64, mime, blobUrl) {
-  var prompt = '這是一張日本商店的收據照片。請仔細辨識以下資訊，並以純JSON格式回傳（絕對不可包含任何markdown、程式碼區塊符號或說明文字，只回傳JSON物件本身）：\n{"store":"店名（若看不到則填unknown）","date":"收據上的日期（格式為M/D，例如3月27日請填3/27；若看不到則填null）","total":收據最終支付的含稅總金額數字（即顧客實際付款金額，不含符號，若看不到則填null）,"is_tax_free":布林值（收據出現「免稅」「Tax-Free」或消費稅為0則為true，否則false）,"tax_rate_type":"稅制類型，只能填：免稅、10%標準稅率、8%減輕稅率、混合稅率、不明，其中之一","tax_amount":收據中的稅金金額數字（免稅則填0，不明則填null）,"tax_free_fee":免稅手續費金額數字（無則填0）,"items":[{"name":"品項名稱（翻譯成繁體中文，保持簡短）","qty":購買數量整數（預設為1）,"unit_price":每件商品的【含稅】單價數字（若收據列的是未稅單價，請自行加上稅金換算為含稅單價後填入；免稅商品則直接填未稅單價）,"amount":該品項含稅合計金額（unit_price × qty）}]}\n判斷準則：若看到「免税対象商品」「Tax-Free」或消費稅額為0，is_tax_free填true；若有「内消費税」「消費税」且金額大於0，填false。每個數字欄位必須是純數字，不含任何文字或符號。';
+  var prompt = [
+    '這是一張日本商店的收據照片。請仔細辨識並以純JSON格式回傳（絕對不可包含任何markdown、程式碼區塊符號或說明文字，只回傳JSON物件本身）：',
+    '{"store":"店名（若看不到則填unknown）","date":"日期（格式M/D，例如3月27日填3/27；若看不到填null）","total":顧客最終實際支付金額的數字（看收據最下方クレジット支払／現金支払／合計欄位；不含符號；若看不到填null）,"is_tax_free":布林值,"tax_rate_type":"只能填：免稅、10%標準稅率、8%減輕稅率、混合稅率、不明 其中之一","tax_amount":消費稅金額數字（免稅填0；不明填null）,"tax_free_fee":TaxFreeFee免稅手續費金額數字（無則填0）,"items":[{"name":"品項名稱（翻譯繁體中文，保持簡短）","qty":數量整數（預設1）,"unit_price":每件單價數字,"amount":合計金額數字（unit_price×qty）}]}',
+    '',
+    '【絕對禁止列入items的行】以下行絕對不是商品，不得出現在items陣列中：',
+    '・TaxFreeFee（免稅手續費行）',
+    '・免税消費税（退稅調整，通常是負數）',
+    '・消費税／内消費税／消費税等（稅金行）',
+    '・小計／合計／支払い（匯總行）',
+    '・任何金額為負數的行',
+    'items只列有「品名＋金額」的實際購買商品。',
+    '',
+    '【is_tax_free判斷】',
+    '・收據頂部有「TAX-FREE FINISHED」印章，或收據上出現「免税」「Tax-Free」字樣 → true',
+    '・有「内消費税」「消費税」且金額大於0且無退稅 → false',
+    '',
+    '【unit_price填法】',
+    '・免稅收據(is_tax_free=true)：直接填收據上列印的金額（顧客實際支付的未稅單價，不需換算）',
+    '・含稅收據(is_tax_free=false)：填含稅單價（若收據只列稅抜價格，請乘以對應稅率換算為含稅價）',
+    '・※記號商品表示8%軽減税率食品，照正常商品處理，列入items',
+    '',
+    '每個數字欄位必須是純數字，不含任何¥符號或文字。'
+  ].join('\n');
 
   fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + apiKey, {
     method: 'POST',
@@ -8940,7 +9106,14 @@ function callGeminiOCR(apiKey, base64, mime, blobUrl) {
         throw new Error('JSON 解析失敗，AI 回傳內容：' + text.slice(0, 200));
       }
     }
-    _receiptItems = parsed.items || [];
+    // ── 過濾非商品行：移除 AI 誤判為品項的手續費／稅金調整行 ──
+    var _nonItemPattern = /taxfree\s*fee|免税消費税|消費税|内消費税|小計|合計|支払/i;
+    _receiptItems = (parsed.items || []).filter(function(it) {
+      if (!it.name) return false;
+      if (_nonItemPattern.test(it.name)) return false;
+      if ((it.unit_price || it.amount || 0) < 0) return false; // 負數行排除
+      return true;
+    });
     // ── 含稅比例修正：若品項加總與 total 有差距，按比例調整各品項金額 ──
     if (!parsed.is_tax_free && parsed.total && _receiptItems.length) {
       var itemsSum = _receiptItems.reduce(function(s, it) {
